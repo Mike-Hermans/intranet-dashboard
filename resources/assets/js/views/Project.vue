@@ -6,7 +6,7 @@
       <div class="padding">
         <router-view></router-view>
       </div>
-      <v-bottom-nav absolute value="true" class="transparent">
+      <v-bottom-nav value="true" class="transparent">
         <v-btn flat light class="teal--text" router :href="baseslug" exact>
           <span>Dashboard</span>
           <v-icon>home</v-icon>

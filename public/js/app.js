@@ -4816,13 +4816,177 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       project: this.$parent.project,
+      apiurl: '/api/project/' + this.$parent.project.slug + '/',
+      tableData: {
+        'hddram': ['hdd', 'ram'],
+        'network': ['rx', 'tx']
+      }
+    };
+  },
 
-      options: {
+  methods: {
+    afterSetExtremes: function afterSetExtremes(e) {
+      var _this = this;
+
+      var tables = [['hdd', 'ram'], ['rx', 'tx']];
+      var charts = [this.$refs.hddram.chart, this.$refs.network.chart];
+
+      var _loop = function _loop(i, names) {
+        var chart = charts[i],
+            seriesOptions = [];
+
+        var _loop2 = function _loop2(j, name) {
+          axios.get(_this.apiurl + 'usage/' + name).then(function (_ref5) {
+            var data = _ref5.data;
+            return chart.series[j].setData(data);
+          }).catch(function (error) {
+            return console.log(error);
+          });
+        };
+
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = Object.entries(names)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var _ref3 = _step2.value;
+
+            var _ref4 = _slicedToArray(_ref3, 2);
+
+            var j = _ref4[0];
+            var name = _ref4[1];
+
+            _loop2(j, name);
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+      };
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = Object.entries(tables)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var _ref = _step.value;
+
+          var _ref2 = _slicedToArray(_ref, 2);
+
+          var i = _ref2[0];
+          var names = _ref2[1];
+
+          _loop(i, names);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      this.fetchTableData(e);
+    },
+    fetchTableData: function fetchTableData(e) {
+      var _this2 = this;
+
+      var chart = this.$refs.tables.chart;
+      axios.get(this.apiurl + 'tables').then(function (_ref6) {
+        var data = _ref6.data;
+
+        var _loop3 = function _loop3(i, table) {
+          axios.get(_this2.apiurl + 'tables/' + table).then(function (_ref9) {
+            var data = _ref9.data;
+            return chart.series[i].setData(data);
+          }).catch(function (error) {
+            return console.log(error);
+          });
+        };
+
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
+
+        try {
+          for (var _iterator3 = data.entries()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var _ref7 = _step3.value;
+
+            var _ref8 = _slicedToArray(_ref7, 2);
+
+            var i = _ref8[0];
+            var table = _ref8[1];
+
+            _loop3(i, table);
+          }
+        } catch (err) {
+          _didIteratorError3 = true;
+          _iteratorError3 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+              _iterator3.return();
+            }
+          } finally {
+            if (_didIteratorError3) {
+              throw _iteratorError3;
+            }
+          }
+        }
+      });
+    },
+    initChart: function initChart(chart) {
+      var _this3 = this;
+
+      var options = {
         chart: {
           type: 'line',
           zoomType: 'x'
@@ -4868,66 +5032,99 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
         yAxis: {
           floor: 0
         },
-        series: [{
-          name: 'hdd',
-          data: []
-        }, {
-          name: 'ram',
-          data: []
-        }],
-        credits: false
-      }
-    };
-  },
-
-  methods: {
-    afterSetExtremes: function afterSetExtremes(e) {
-      var _this = this;
-
-      var names = ['hdd', 'ram'];
-
-      var _loop = function _loop(i, name) {
-        axios.get('/api/project/' + _this.project.slug + '/usage/' + name).then(function (_ref3) {
-          var data = _ref3.data;
-          return _this.$refs.hddram.chart.series[i].setData(data);
-        }).catch(function (error) {
-          return console.log(error);
-        });
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.y:.2f}</b><br/>',
+          shared: true
+        },
+        credits: false,
+        series: []
       };
 
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      if (chart !== 'tables') {
+        var _loop4 = function _loop4(i, name) {
+          axios.get(_this3.apiurl + 'usage/' + name).then(function (_ref12) {
+            var data = _ref12.data;
+            return _this3.$refs[chart].chart.addSeries({ name: name, data: data });
+          }).catch(function (error) {
+            return console.log(error);
+          });
+        };
 
-      try {
-        for (var _iterator = names.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _ref = _step.value;
+        var _iteratorNormalCompletion4 = true;
+        var _didIteratorError4 = false;
+        var _iteratorError4 = undefined;
 
-          var _ref2 = _slicedToArray(_ref, 2);
-
-          var i = _ref2[0];
-          var name = _ref2[1];
-
-          _loop(i, name);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
+          for (var _iterator4 = Object.entries(this.tableData[chart])[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+            var _ref10 = _step4.value;
+
+            var _ref11 = _slicedToArray(_ref10, 2);
+
+            var i = _ref11[0];
+            var name = _ref11[1];
+
+            _loop4(i, name);
           }
+        } catch (err) {
+          _didIteratorError4 = true;
+          _iteratorError4 = err;
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          try {
+            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+              _iterator4.return();
+            }
+          } finally {
+            if (_didIteratorError4) {
+              throw _iteratorError4;
+            }
           }
         }
+      } else {
+        axios.get(this.apiurl + 'tables').then(function (_ref13) {
+          var data = _ref13.data;
+
+          var _loop5 = function _loop5(_i, _name) {
+            axios.get(_this3.apiurl + 'tables/' + _name).then(function (_ref16) {
+              var data = _ref16.data;
+              return _this3.$refs.tables.chart.addSeries({ name: _name, data: data });
+            }).catch(function (error) {
+              return console.log(error);
+            });
+          };
+
+          var _iteratorNormalCompletion5 = true;
+          var _didIteratorError5 = false;
+          var _iteratorError5 = undefined;
+
+          try {
+            for (var _iterator5 = Object.entries(data)[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+              var _ref14 = _step5.value;
+
+              var _ref15 = _slicedToArray(_ref14, 2);
+
+              var _i = _ref15[0];
+              var _name = _ref15[1];
+
+              _loop5(_i, _name);
+            }
+          } catch (err) {
+            _didIteratorError5 = true;
+            _iteratorError5 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                _iterator5.return();
+              }
+            } finally {
+              if (_didIteratorError5) {
+                throw _iteratorError5;
+              }
+            }
+          }
+        });
       }
+      return options;
     }
-  },
-  mounted: function mounted() {
-    this.afterSetExtremes({ min: 0, max: 1 });
   }
 });
 
@@ -6504,12 +6701,34 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('h4', [_vm._v(_vm._s(_vm.project.name))]), _vm._v(" "), _c('highstock', {
+  return _c('div', [_c('h4', [_vm._v(_vm._s(_vm.project.name))]), _vm._v(" "), _c('v-row', [_c('v-col', {
+    attrs: {
+      "xs6": ""
+    }
+  }, [_c('v-card', [_c('v-card-text', [_c('highstock', {
     ref: "hddram",
     attrs: {
-      "options": _vm.options
+      "options": _vm.initChart('hddram')
     }
-  })], 1)
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-col', {
+    attrs: {
+      "xs6": ""
+    }
+  }, [_c('v-card', [_c('v-card-text', [_c('highstock', {
+    ref: "network",
+    attrs: {
+      "options": _vm.initChart('network')
+    }
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-row', [_c('v-col', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-card', [_c('v-card-text', [_c('highstock', {
+    ref: "tables",
+    attrs: {
+      "options": _vm.initChart('tables')
+    }
+  })], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -6580,7 +6799,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('router-view')], 1), _vm._v(" "), _c('v-bottom-nav', {
     staticClass: "transparent",
     attrs: {
-      "absolute": "",
       "value": "true"
     }
   }, [_c('v-btn', {

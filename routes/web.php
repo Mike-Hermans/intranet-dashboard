@@ -19,11 +19,11 @@ Route::get('/api/projects', 'ProjectController@get_projects');
 Route::get('/api/project/{slug}', 'ProjectController@get_project');
 
 // usage items
-Route::get('/api/project/{slug}/usage/{type?}/', 'DataController@usage')
+Route::get('/api/project/{slug}/usage/{type?}', 'DataController@usage')
       ->where(['type' => 'hdd|ram|(t|r)x']);
 
 Route::get('/api/project/{slug}/plugins', 'DataController@plugins');
-Route::get('/api/project/{slug}/tables', 'DataController@tables');
+Route::get('/api/project/{slug}/tables/{table?}', 'DataController@tables');
 
 Route::post('/api/project/{slug}/key', 'ProjectController@set_key');
 Route::post('/api/add', 'ProjectController@add_project');
