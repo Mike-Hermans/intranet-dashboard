@@ -4940,13 +4940,44 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
       var _this2 = this;
 
       var chart = this.$refs.tables.chart;
-      axios.get(this.apiurl + 'tables').then(function (_ref6) {
+      axios.get(this.apiurl + 'tables?top=4').then(function (_ref6) {
         var data = _ref6.data;
 
         var _loop3 = function _loop3(i, table) {
           axios.get(_this2.apiurl + 'tables/' + table).then(function (_ref9) {
             var data = _ref9.data;
-            return chart.series[i].setData(data);
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
+
+            try {
+              for (var _iterator4 = chart.series.entries()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                var _ref10 = _step4.value;
+
+                var _ref11 = _slicedToArray(_ref10, 2);
+
+                var _i = _ref11[0];
+                var serie = _ref11[1];
+
+                if (serie.name == table) {
+                  chart.series[_i].setData(data);
+                  continue;
+                }
+              }
+            } catch (err) {
+              _didIteratorError4 = true;
+              _iteratorError4 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                  _iterator4.return();
+                }
+              } finally {
+                if (_didIteratorError4) {
+                  throw _iteratorError4;
+                }
+              }
+            }
           }).catch(function (error) {
             return console.log(error);
           });
@@ -5042,82 +5073,82 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
       if (chart !== 'tables') {
         var _loop4 = function _loop4(i, name) {
-          axios.get(_this3.apiurl + 'usage/' + name).then(function (_ref12) {
-            var data = _ref12.data;
+          axios.get(_this3.apiurl + 'usage/' + name).then(function (_ref14) {
+            var data = _ref14.data;
             return _this3.$refs[chart].chart.addSeries({ name: name, data: data });
           }).catch(function (error) {
             return console.log(error);
           });
         };
 
-        var _iteratorNormalCompletion4 = true;
-        var _didIteratorError4 = false;
-        var _iteratorError4 = undefined;
+        var _iteratorNormalCompletion5 = true;
+        var _didIteratorError5 = false;
+        var _iteratorError5 = undefined;
 
         try {
-          for (var _iterator4 = Object.entries(this.tableData[chart])[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            var _ref10 = _step4.value;
+          for (var _iterator5 = Object.entries(this.tableData[chart])[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var _ref12 = _step5.value;
 
-            var _ref11 = _slicedToArray(_ref10, 2);
+            var _ref13 = _slicedToArray(_ref12, 2);
 
-            var i = _ref11[0];
-            var name = _ref11[1];
+            var i = _ref13[0];
+            var name = _ref13[1];
 
             _loop4(i, name);
           }
         } catch (err) {
-          _didIteratorError4 = true;
-          _iteratorError4 = err;
+          _didIteratorError5 = true;
+          _iteratorError5 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion4 && _iterator4.return) {
-              _iterator4.return();
+            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+              _iterator5.return();
             }
           } finally {
-            if (_didIteratorError4) {
-              throw _iteratorError4;
+            if (_didIteratorError5) {
+              throw _iteratorError5;
             }
           }
         }
       } else {
-        axios.get(this.apiurl + 'tables').then(function (_ref13) {
-          var data = _ref13.data;
+        axios.get(this.apiurl + 'tables?top=4').then(function (_ref15) {
+          var data = _ref15.data;
 
-          var _loop5 = function _loop5(_i, _name) {
-            axios.get(_this3.apiurl + 'tables/' + _name).then(function (_ref16) {
-              var data = _ref16.data;
+          var _loop5 = function _loop5(_i2, _name) {
+            axios.get(_this3.apiurl + 'tables/' + _name).then(function (_ref18) {
+              var data = _ref18.data;
               return _this3.$refs.tables.chart.addSeries({ name: _name, data: data });
             }).catch(function (error) {
               return console.log(error);
             });
           };
 
-          var _iteratorNormalCompletion5 = true;
-          var _didIteratorError5 = false;
-          var _iteratorError5 = undefined;
+          var _iteratorNormalCompletion6 = true;
+          var _didIteratorError6 = false;
+          var _iteratorError6 = undefined;
 
           try {
-            for (var _iterator5 = Object.entries(data)[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-              var _ref14 = _step5.value;
+            for (var _iterator6 = Object.entries(data)[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+              var _ref16 = _step6.value;
 
-              var _ref15 = _slicedToArray(_ref14, 2);
+              var _ref17 = _slicedToArray(_ref16, 2);
 
-              var _i = _ref15[0];
-              var _name = _ref15[1];
+              var _i2 = _ref17[0];
+              var _name = _ref17[1];
 
-              _loop5(_i, _name);
+              _loop5(_i2, _name);
             }
           } catch (err) {
-            _didIteratorError5 = true;
-            _iteratorError5 = err;
+            _didIteratorError6 = true;
+            _iteratorError6 = err;
           } finally {
             try {
-              if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                _iterator5.return();
+              if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                _iterator6.return();
               }
             } finally {
-              if (_didIteratorError5) {
-                throw _iteratorError5;
+              if (_didIteratorError6) {
+                throw _iteratorError6;
               }
             }
           }

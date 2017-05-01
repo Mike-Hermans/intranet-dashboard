@@ -64,11 +64,18 @@ export default {
     },
     fetchTableData(e) {
       let chart = this.$refs.tables.chart
-      axios.get(this.apiurl + 'tables')
+      axios.get(this.apiurl + 'tables?top=4')
       .then(({data}) => {
         for ( let [i, table] of data.entries() ) {
           axios.get(this.apiurl + 'tables/' + table)
-          .then(({data}) => chart.series[i].setData(data))
+          .then(({data}) => {
+            for ( let [i, serie] of chart.series.entries() ) {
+              if (serie.name == table) {
+                chart.series[i].setData(data)
+                continue
+              }
+            }
+          })
           .catch(error => console.log(error))
         }
       })
@@ -135,7 +142,7 @@ export default {
           .catch(error => console.log(error))
         }
       } else {
-        axios.get(this.apiurl + 'tables')
+        axios.get(this.apiurl + 'tables?top=4')
         .then(({data}) => {
           for (let [i, name] of Object.entries(data) ) {
             axios.get(this.apiurl + 'tables/' + name)

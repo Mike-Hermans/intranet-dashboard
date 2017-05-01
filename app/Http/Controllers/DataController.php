@@ -40,9 +40,16 @@ class DataController extends Controller {
   }
 
   public function list_tables() {
+    $top = false;
+    if ( is_numeric(Input::get('top')) ) {
+      $top = Input::get('top');
+    }
     $rows = \DB::table($this->table)
     ->select('table')
     ->where('timestamp', '=', \DB::table($this->table)->max('timestamp'))
+    ->when($top, function($query) use ($top) {
+        return $query->orderBy('size', 'desc')->limit($top);
+    })
     ->get();
     $tables = array();
     foreach ($rows as $row) {
