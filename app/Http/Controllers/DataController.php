@@ -33,7 +33,7 @@ class DataController extends Controller {
 
     $lines = array();
     foreach($items as $item) {
-      $lines[] = array($item->timestamp, $item->size);
+      $lines[] = array($item->timestamp * 1000, $item->size);
     }
 
     return json_encode($lines);
@@ -67,7 +67,7 @@ class DataController extends Controller {
 
     $lines = array();
     foreach($items as $item) {
-      $lines[] = array($item->timestamp, $item->$type);
+      $lines[] = array($item->timestamp * 1000, $item->$type);
     }
 
     return json_encode($lines);
