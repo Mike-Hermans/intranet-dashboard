@@ -41,16 +41,64 @@ class FetchDataController extends Controller {
       echo 'invalid_key';
       return false;
     }
-    $this->project = $project->slug;
+    $this->project = $project;
     return 'true';
   }
 
   private function save_data( $content ) {
-    $row = $content['usage'];
-    $row['timestamp'] = $this->timestamp;
-    $row['page'] = 500;
-    $table = $this->project . '_usage';
-    \DB::table($table)->insert($row);
+
+    if(isset($content['status'])) {
+      $currentversion = $this->project->status()
+      ->select('php', 'os', 'mem', 'disk', 'up')
+      ->where('project_id', $this->project->id)
+      ->orderBy('timestamp', 'desc')->first()->toArray();
+
+      $insertnewvalues = false;
+      foreach ($currentversion as $key => $value) {
+        if ( $value != $content['status'][$key]) {
+          $insertnewvalues = true;
+          break;
+        }
+      }
+
+      if ( $insertnewvalues ) {
+        $status = $content['status'];
+        $status['timestamp'] = $this->timestamp;
+        $status['project_id'] = $this->project->id;
+        $this->project->status()->insert($status);
+      }
+    }
+
+    /*
+      Update version only if it's different
+    */
+    if(isset($content['wp_version'])) {
+      $currentversion = $this->project->wp_version()
+      ->select('version')
+      ->where('project_id', $this->project->id)
+      ->orderBy('timestamp', 'desc')->first();
+      if ( $currentversion->version != $content['wp_version']['wp'] ) {
+        $wp_version = array();
+        $wp_version['version'] = $content['wp_version']['wp'];
+        $wp_version['timestamp'] = $this->timestamp;
+        $wp_version['project_id'] = $this->project->id;
+        $this->project->wp_version()->insert($wp_version);
+      }
+    }
+
+    if(isset($content['events']) && ! empty($content['events'])) {
+      foreach($content['events'] as $event) {
+        $this->project->events()->insert(array(
+          'project_id' => $this->project->id,
+          'timestamp' => $this->timestamp,
+          'event' => $event
+        ));
+      }
+    }
+
+    if (isset($content['usage'])) {
+      $this->save_usage_data($content['usage']);
+    }
 
     if (isset($content['tables'])) {
       $this->save_table_data($content['tables']);
@@ -62,7 +110,7 @@ class FetchDataController extends Controller {
   }
 
   private function save_table_data($tables) {
-    $dbtable = $this->project . '_db';
+    $dbtable = $this->project->slug . '_db';
     foreach($tables as $table => $size) {
       $row = array(
         'timestamp' => $this->timestamp,
@@ -70,6 +118,21 @@ class FetchDataController extends Controller {
         'size' => $size
       );
       \DB::table($dbtable)->insert($row);
+    }
+  }
+
+  private function save_usage_data($usage) {
+    $table = $this->project->slug . '_usage';
+    $usage['timestamp'] = $this->timestamp;
+    $usage['page'] = 500;
+    \DB::table($table)->insert($usage);
+  }
+
+  private function save_plugin_data($plugins) {
+    $dbtable = $this->project->slug . '_plugins';
+    foreach($plugins as $plugin) {
+      $plugin['timestamp'] = $this->timestamp;
+      \DB::table($dbtable)->insert($plugin);
     }
   }
 }

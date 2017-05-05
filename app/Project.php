@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     protected $hidden = [
-        'id',
         'key'
     ];
 
@@ -24,5 +23,17 @@ class Project extends Model
         return true;
       }
       return false;
+    }
+
+    public function status() {
+      return $this->hasMany('App\Status');
+    }
+
+    public function wp_version() {
+      return $this->hasMany('App\WpVersion');
+    }
+
+    public function events() {
+      return $this->hasMany('App\Events');
     }
 }

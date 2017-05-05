@@ -2,30 +2,38 @@
   <div>
     <h4>{{project.name}}</h4>
     <v-row>
-      <v-col xs6>
-        <v-card>
-          <v-card-text>
-            <highstock :options="initChart('hddram')" ref="hddram"></highstock>
-          </v-card-text>
-        </v-card>
+      <v-col xs9 class="chartcontainer">
+        <v-row>
+          <v-col xs6>
+            <v-card>
+              <v-card-text>
+                <highstock :options="initChart('hddram')" ref="hddram"></highstock>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col xs6>
+            <v-card>
+              <v-card-text>
+                <highstock :options="initChart('network')" ref="network"></highstock>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col xs12>
+            <v-card>
+              <v-card-text>
+                <highstock :options="initChart('tables')" ref="tables"></highstock>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
-      <v-col xs6>
-        <v-card>
-          <v-card-text>
-            <highstock :options="initChart('network')" ref="network"></highstock>
-          </v-card-text>
-        </v-card>
+      <v-col xs3>
+
       </v-col>
     </v-row>
-    <v-row>
-      <v-col xs12>
-        <v-card>
-          <v-card-text>
-            <highstock :options="initChart('tables')" ref="tables"></highstock>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+
   </div>
 </template>
 
@@ -120,7 +128,7 @@ export default {
         },
         xAxis: {
           events: {
-            afterSetExtremes: this.afterSetExtremes
+            //afterSetExtremes: this.afterSetExtremes
           },
           minRange: 3600 * 1000
         },
@@ -129,7 +137,8 @@ export default {
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.y:.2f}</b><br/>',
-            shared: true
+            split: true,
+            shared: false
         },
         credits: false,
         series: []

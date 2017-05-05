@@ -51,6 +51,7 @@ class ProjectController extends Controller {
 
     $this->generate_usage_table( $project->slug );
     $this->generate_db_table( $project->slug );
+    $this->generate_plugin_table( $project->slug );
 
     return true;
   }
@@ -78,10 +79,11 @@ class ProjectController extends Controller {
     \Schema::create( $name . '_plugins', function( Blueprint $table ) {
       $table->integer('timestamp');
       $table->string('name', 64);
-      $table->string('version', 16);
+      $table->string('version', 16)->nullable();
       $table->string('slug', 64);
-      $table->boolean('active');
-      $table->string('new_version', 16);
+      $table->string('uri', 120);
+      $table->boolean('active')->nullable();
+      $table->string('new_version', 16)->nullable();
     });
   }
 }
