@@ -17,6 +17,7 @@ class CreateProjectsTable extends Migration
             $table->increments('id');
             $table->text('name');
             $table->text('slug');
+            $table->text('url');
             $table->text('key');
         });
     }

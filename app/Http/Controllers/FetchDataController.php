@@ -124,7 +124,7 @@ class FetchDataController extends Controller {
   private function save_usage_data($usage) {
     $table = $this->project->slug . '_usage';
     $usage['timestamp'] = $this->timestamp;
-    $usage['page'] = 500;
+    $usage['page'] = $this->ping();
     \DB::table($table)->insert($usage);
   }
 
@@ -134,5 +134,21 @@ class FetchDataController extends Controller {
       $plugin['timestamp'] = $this->timestamp;
       \DB::table($dbtable)->insert($plugin);
     }
+  }
+
+  private function ping() {
+    if ( $this->project->url ) {
+      $ch = curl_init($this->project->url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+      if (curl_exec($ch)) {
+        $info = curl_getinfo($ch);
+        curl_close($ch);
+        var_dump($info);
+        return $info['total_time'];
+      }
+      curl_close($ch);
+      return -1;
+    }
+    return null;
   }
 }
