@@ -59,7 +59,6 @@ class DataController extends Controller {
   }
 
   public function usage($slug, $type = false) {
-    \DB::enableQueryLog();
     $this->verify_project($slug);
     $this->table = $slug . '_usage';
 
@@ -78,6 +77,27 @@ class DataController extends Controller {
     }
 
     return json_encode($lines);
+  }
+
+  public function status($slug, $date = false) {
+    $this->verify_project($slug);
+
+    $wp = \DB::table('wp_versions')
+    ->where('project_id', $this->project->id)
+    ->orderBy('timestamp', 'desc')->limit(1)
+    ->get(['version']);
+
+    $status = \DB::table('statuses')
+    ->where('project_id', $this->project->id)
+    ->orderBy('timestamp', 'desc')->limit(1)
+    ->get();
+
+    if ( isset($status[0]) ) {
+      $status[0]->wp = $wp[0]->version;
+      return json_encode($status[0]);
+    }
+
+    return 0;
   }
 
   private function select() {

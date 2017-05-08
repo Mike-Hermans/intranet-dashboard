@@ -22,7 +22,7 @@ Route::get('/api/project/{slug}', 'ProjectController@get_project');
   API used by Javascript
 */
 Route::get('/api/project/{slug}/usage/{type?}', 'DataController@usage')
-      ->where(['type' => 'hdd|ram|(t|r)x']);
+      ->where(['type' => 'hdd|ram|(t|r)x|page']);
 
 // Get all plugins
 Route::get('/api/project/{slug}/plugins', 'DataController@plugins');
@@ -30,11 +30,8 @@ Route::get('/api/project/{slug}/plugins', 'DataController@plugins');
 // Get all tables, or if table is given, data for specific table
 Route::get('/api/project/{slug}/tables/{table?}', 'DataController@tables');
 
-Route::get('/api/project/{slug}/test', function($slug) {
-  $project = \App\Project::where('slug', '=', $slug)->first();
-  // var_dump($project->status->first());
-  // var_dump($project->wp_version->first());
-});
+// Get status, with optional from date
+Route::get('/api/project/{slug}/status/{date?}', 'DataController@status');
 
 Route::post('/api/project/{slug}/key', 'ProjectController@set_key');
 Route::post('/api/add', 'ProjectController@add_project');
