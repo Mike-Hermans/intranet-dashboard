@@ -22,7 +22,7 @@ class CSVController extends Controller {
       fputcsv($file, $columns);
 
       foreach($items as $item) {
-         fputcsv($file, array($item->timestamp,$item->hdd,$item->ram,$item->rx,$item->tx,$item->page));
+         fputcsv($file, array($item->timestamp * 1000,$item->hdd,$item->ram,$item->rx,$item->tx,$item->page));
       }
       fclose($file);
     }, 200, [
