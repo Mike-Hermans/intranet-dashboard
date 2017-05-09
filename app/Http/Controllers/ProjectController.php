@@ -63,7 +63,7 @@ class ProjectController extends Controller {
       $table->float('ram', 5, 2);
       $table->float('rx', 8, 2);
       $table->float('tx', 8, 2);
-      $table->float('page');
+      $table->float('page', 9, 3);
     });
   }
 

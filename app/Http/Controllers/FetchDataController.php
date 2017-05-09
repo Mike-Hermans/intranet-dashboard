@@ -46,7 +46,7 @@ class FetchDataController extends Controller {
   }
 
   private function save_data( $content ) {
-
+    var_dump('a)');
     if(isset($content['status'])) {
       $currentversion = $this->project->status()
       ->select('php', 'os', 'mem', 'disk', 'up')
@@ -57,7 +57,6 @@ class FetchDataController extends Controller {
       foreach ($currentversion as $key => $value) {
         if ( $value != $content['status'][$key]) {
           $insertnewvalues = true;
-          break;
         }
       }
 

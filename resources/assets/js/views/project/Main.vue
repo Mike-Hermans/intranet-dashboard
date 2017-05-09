@@ -7,28 +7,28 @@
           <v-col xs6>
             <v-card>
               <v-card-text>
-                <highstock :options="initChart('hddram')" ref="hddram"></highstock>
+                <highstock :options="options" ref="hddram"></highstock>
               </v-card-text>
             </v-card>
           </v-col>
           <v-col xs6>
             <v-card>
               <v-card-text>
-                <highstock :options="initChart('network')" ref="network"></highstock>
+                <highstock :options="options" ref="network"></highstock>
               </v-card-text>
             </v-card>
           </v-col>
           <v-col xs6>
             <v-card>
               <v-card-text>
-                <highstock :options="initChart('tables')" ref="tables"></highstock>
+                <highstock :options="options" ref="tables"></highstock>
               </v-card-text>
             </v-card>
           </v-col>
           <v-col xs6>
             <v-card>
               <v-card-text>
-                <highstock :options="initChart('latency')" ref="latency"></highstock>
+                <highstock :options="options" ref="latency"></highstock>
               </v-card-text>
             </v-card>
           </v-col>
@@ -93,52 +93,25 @@ export default {
         'hddram': ['hdd', 'ram'],
         'network': ['rx', 'tx'],
         'latency': ['page']
-      }
-    }
-  },
-  methods: {
-    // afterSetExtremes(e) {
-    //   let tables = [
-    //     ['hdd', 'ram'],
-    //     ['rx', 'tx'],
-    //     ['page']
-    //   ]
-    //   let charts = [
-    //     this.$refs.hddram.chart,
-    //     this.$refs.network.chart,
-    //     this.$refs.latency.chart
-    //   ]
-    //   for (let [i, names] of Object.entries(tables)) {
-    //     let chart = charts[i],
-    //     seriesOptions = []
-    //     for (let [j, name] of Object.entries(names)) {
-    //       axios.get(this.apiurl + 'usage/' + name)
-    //       .then(({data}) => chart.series[j].setData(data))
-    //       .catch(error => console.log(error))
-    //     }
-    //   }
-    //   this.fetchTableData(e)
-    // },
-    // fetchTableData(e) {
-    //   let chart = this.$refs.tables.chart
-    //   axios.get(this.apiurl + 'tables?top=4')
-    //   .then(({data}) => {
-    //     for ( let [i, table] of data.entries() ) {
-    //       axios.get(this.apiurl + 'tables/' + table)
-    //       .then(({data}) => {
-    //         for ( let [i, serie] of chart.series.entries() ) {
-    //           if (serie.name == table) {
-    //             chart.series[i].setData(data)
-    //             continue
-    //           }
-    //         }
-    //       })
-    //       .catch(error => console.log(error))
-    //     }
-    //   })
-    // },
-    initChart(chart) {
-      let options = {
+      },
+      graphData: [
+        {
+          name: 'hddram',
+          values: ['hdd', 'ram'],
+          slug: 'usage'
+        },
+        {
+          name: 'network',
+          values: ['rx', 'tx'],
+          slug: 'usage'
+        },
+        {
+          name: 'latency',
+          values: ['page'],
+          slug: 'usage'
+        }
+      ],
+      options: {
         chart: {
           type: 'line',
           zoomType: 'x'
@@ -192,31 +165,46 @@ export default {
         credits: false,
         series: []
       }
-
-      if ( chart == 'hddram' ) {
-        options.yAxis.max = 100
-      }
-
-      if ( chart !== 'tables' ) {
-        for (let [i, name] of Object.entries(this.tableData[chart])) {
-          axios.get(this.apiurl + 'usage/' + name)
-          .then(({data}) => this.$refs[chart].chart.addSeries({ name, data }))
-          .catch(error => console.log(error))
-        }
-      } else {
-        axios.get(this.apiurl + 'tables?top=4')
-        .then(({data}) => {
-          for (let [i, name] of Object.entries(data) ) {
-            axios.get(this.apiurl + 'tables/' + name)
-            .then(({data}) => this.$refs.tables.chart.addSeries({ name, data }))
-            .catch(error => console.log(error))
-          }
-        })
-      }
-      return options
     }
   },
-  created() {
+  methods: {
+    // afterSetExtremes(e) {
+    //   for (let [i, graph] of Object.entries(this.graphData)) {
+    //     for (let [j, value] of Object.entries(graph.values)) {
+    //       axios.get(this.apiurl + graph.slug + '/' + value)
+    //       .then(({data}) => {
+    //         for ( let [k, serie] of chart.series.entries() ) {
+    //           if (serie.name == table) {
+    //             this.$refs[graph.name].chart.series[k].setData(data)
+    //             continue
+    //           }
+    //         }
+    //       })
+    //       .catch(error => console.log(error))
+    //     }
+    //   }
+    // },
+    setChartData() {
+      for (let [i, graph] of Object.entries(this.graphData)) {
+        for (let [j, value] of Object.entries(graph.values)) {
+          axios.get(this.apiurl + graph.slug + '/' + value)
+          .then(({data}) => this.$refs[graph.name].chart.addSeries({ name: value, data }))
+          .catch(error => console.log(error))
+        }
+      }
+    }
+  },
+  mounted() {
+    axios.get(this.apiurl + 'tables?top=4')
+    .then(({data}) => {
+      this.graphData.push({
+        name: 'tables',
+        values: data,
+        slug: 'tables'
+      })
+      this.setChartData();
+    })
+    .catch(error => console.log(error))
     axios.get(this.apiurl + 'status')
     .then(({data}) => this.status = data)
     .catch(error => console.log(error))
