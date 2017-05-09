@@ -46,18 +46,21 @@ class FetchDataController extends Controller {
   }
 
   private function save_data( $content ) {
-    var_dump('a)');
     if(isset($content['status'])) {
-      $currentversion = $this->project->status()
+      $currentstatus = $this->project->status()
       ->select('php', 'os', 'mem', 'disk', 'up')
       ->where('project_id', $this->project->id)
-      ->orderBy('timestamp', 'desc')->first()->toArray();
-
+      ->orderBy('timestamp', 'desc')->first();
       $insertnewvalues = false;
-      foreach ($currentversion as $key => $value) {
-        if ( $value != $content['status'][$key]) {
-          $insertnewvalues = true;
+      if ( $currentstatus != null ) {
+        $currentstatus = $currentstatus->toArray();
+        foreach ($currentstatus as $key => $value) {
+          if ( $value != $content['status'][$key]) {
+            $insertnewvalues = true;
+          }
         }
+      } else {
+        $insertnewvalues = true;
       }
 
       if ( $insertnewvalues ) {
@@ -76,7 +79,7 @@ class FetchDataController extends Controller {
       ->select('version')
       ->where('project_id', $this->project->id)
       ->orderBy('timestamp', 'desc')->first();
-      if ( $currentversion->version != $content['wp_version']['wp'] ) {
+      if ( $currentversion == null || $currentversion->version != $content['wp_version']['wp'] ) {
         $wp_version = array();
         $wp_version['version'] = $content['wp_version']['wp'];
         $wp_version['timestamp'] = $this->timestamp;
@@ -142,7 +145,6 @@ class FetchDataController extends Controller {
       if (curl_exec($ch)) {
         $info = curl_getinfo($ch);
         curl_close($ch);
-        var_dump($info);
         return $info['total_time'];
       }
       curl_close($ch);

@@ -184,6 +184,22 @@ export default {
     //     }
     //   }
     // },
+    // syncCharts(e) {
+    //   console.log('a')
+    //   var chart,
+    //     point,
+    //     i,
+    //     event;
+    //     console.log(this.$refs)
+    //     for (let [i, graph] of Object.entries(this.$refs)) {
+    //         event = graph.chart.pointer.normalize(e.originalEvent); // Find coordinates within the chart
+    //         point = graph.chart.series[0].searchPoint(event, true); // Get the hovered point
+    //
+    //         if (point) {
+    //             point.highlight(e);
+    //         }
+    //     }
+    // },
     setChartData() {
       for (let [i, graph] of Object.entries(this.graphData)) {
         for (let [j, value] of Object.entries(graph.values)) {
@@ -208,6 +224,19 @@ export default {
     axios.get(this.apiurl + 'status')
     .then(({data}) => this.status = data)
     .catch(error => console.log(error))
+
+    // this.Highcharts.Pointer.prototype.reset = function () {
+    //     return undefined;
+    // };
+    //
+    // /**
+    //  * Highlight a point by showing tooltip, setting hover state and draw crosshair
+    //  */
+    // this.Highcharts.Point.prototype.highlight = function (event) {
+    //     this.onMouseOver(); // Show the hover marker
+    //     this.series.chart.tooltip.refresh(this); // Show the tooltip
+    //     this.series.chart.xAxis[0].drawCrosshair(event, this); // Show the crosshair
+    // };
   }
 }
 </script>
