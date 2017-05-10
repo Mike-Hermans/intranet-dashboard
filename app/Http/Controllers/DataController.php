@@ -94,6 +94,7 @@ class DataController extends Controller {
 
     if ( isset($status[0]) ) {
       $status[0]->wp = $wp[0]->version;
+      $status[0]->up *= 1000;
       return json_encode($status[0]);
     }
 

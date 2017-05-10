@@ -64,7 +64,19 @@
             <v-card-row height="60px">
               <v-icon class="mr-3">info_outline</v-icon>
               <div>
-                <div>Running since</div><strong>{{this.status.up}}</strong>
+                <div>Running since</div><strong>{{ this.status.up | moment("MMM Do YYYY, HH:mm:ss")}}</strong>
+              </div>
+            </v-card-row>
+            <v-card-row height="60px">
+              <v-icon class="mr-3">info_outline</v-icon>
+              <div>
+                <div>Total RAM memory</div><strong>{{ Math.round(this.status.mem / 1000) }}MB</strong>
+              </div>
+            </v-card-row>
+            <v-card-row height="60px">
+              <v-icon class="mr-3">info_outline</v-icon>
+              <div>
+                <div>Total disk space</div><strong>{{ Math.round(this.status.disk / 1000000000) }}GB</strong>
               </div>
             </v-card-row>
           </v-card-text>

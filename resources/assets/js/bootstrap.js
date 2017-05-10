@@ -1,19 +1,21 @@
 
 import Vue from 'vue'
 import axios from 'axios'
+import moment from 'moment'
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
-import VueHighcharts from 'vue-highcharts';
-import Highcharts from 'highcharts/highstock';
+import VueHighcharts from 'vue-highcharts'
+import Highcharts from 'highcharts/highstock'
 
 window.Vue = Vue
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(VueHighcharts, { Highcharts })
+Vue.use(require('vue-moment'), { moment })
 window.axios = axios
 
-window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.csrfToken;
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.csrfToken
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
