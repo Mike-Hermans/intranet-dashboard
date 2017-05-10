@@ -137,12 +137,14 @@ export default {
     '$route' (to, from) {
       if (to.params.project != from.params.project) {
         this.baseslug = '/project/' + to.params.project + '/'
+        this.apiurl = '/api' + this.baseslug
         this.fetchProject()
       }
     }
   },
   methods: {
     fetchProject() {
+      this.renderCharts = false
       axios.get('/api/project/' + this.$route.params.project)
       .then(({data}) => {
         this.project = data
