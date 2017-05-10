@@ -13,7 +13,6 @@ new Vue({
     el: '#app',
     router,
     data: {
-        nav: null,
-        toolbarItems: false
+        nav: null
     }
 });

@@ -1,5 +1,5 @@
 <template>
-  <v-sidebar v-model="$parent.nav">
+  <v-sidebar v-model="$parent.nav" left fixed drawer>
     <v-list dense>
       <!-- Group item -->
       <template v-for="(item,i) in itemGroup">
