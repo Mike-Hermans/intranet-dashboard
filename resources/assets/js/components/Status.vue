@@ -72,23 +72,32 @@
 </template>
 
 <script>
+  import { EventBus } from '../EventBus'
   export default {
     name: 'status',
-    props: ['apiurl'],
     data() {
       return {
-        status: null
+        status: null,
+        statusurl: '/api/project/' + this.$route.params.project + '/status'
       }
     },
     methods: {
       getStatus() {
-        axios.get(this.apiurl + 'status')
-        .then(({data}) => this.status = data)
+        axios.get(this.statusurl)
+        .then(({data}) => { this.status = data; console.log(this.status) })
         .catch(error => console.log(error))
       }
     },
     mounted() {
       this.getStatus()
+    },
+    watch: {
+      '$route' (to, from) {
+        if (to.params.project != from.params.project) {
+          this.statusurl = '/api/project/' + to.params.project + '/status'
+          this.getStatus()
+        }
+      }
     }
   }
 </script>

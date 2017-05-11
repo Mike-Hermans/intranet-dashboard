@@ -13,7 +13,7 @@
             </v-row>
           </v-col>
           <v-col xs12 lg3>
-            <status :apiurl="apiurl"></status>
+            <status></status>
           </v-col>
         </v-row>
       </div>
