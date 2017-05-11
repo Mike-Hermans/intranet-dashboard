@@ -74,9 +74,6 @@
     },
     methods: {
       createChart() {
-        while ( this.$refs[this.data.name].chart.length > 0 ) {
-          this.$refs[this.data.name].chart.series[0].remove(true)
-        }
         for (let [key, value] of Object.entries(this.data.values)) {
           axios.get('/api/project/' + this.$route.params.project + '/' + this.data.slug + '/' + value)
           .then(({data}) => this.$refs[this.data.name].chart.addSeries({ name: value, data }))
@@ -89,3 +86,12 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+.card__title {
+  padding-bottom: 0;
+}
+.card__text {
+  padding-top: 0;
+}
+</style>
