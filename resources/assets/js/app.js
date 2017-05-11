@@ -13,6 +13,6 @@ new Vue({
     el: '#app',
     router,
     data: {
-        nav: null
+        nav: true
     }
 });

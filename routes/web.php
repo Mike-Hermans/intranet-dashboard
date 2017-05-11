@@ -22,7 +22,7 @@ Route::get('/api/project/{slug}', 'ProjectController@get_project');
   API used by Javascript
 */
 Route::get('/api/project/{slug}/usage/{type?}', 'DataController@usage')
-      ->where(['type' => 'hdd|ram|(t|r)x|page']);
+      ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
 // Get all plugins
 Route::get('/api/project/{slug}/plugins', 'DataController@plugins');

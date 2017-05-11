@@ -13,8 +13,10 @@
         </script>
     </head>
     <body>
-      <v-app id="app" left-sidebar top-toolbar>
-        <toolbar></toolbar>
+      <v-app id="app" with left-fixed-sidebar top-fixed-toolbar>
+        <header>
+          <toolbar></toolbar>
+        </header>
         <main>
           <sidebar></sidebar>
           <v-content>

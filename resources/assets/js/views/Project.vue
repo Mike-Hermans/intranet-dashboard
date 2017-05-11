@@ -1,9 +1,9 @@
 <template>
     <div v-if="project">
-      <v-alert error v-bind:value="!project.projectkey" class="nomargin elevation-1">
+      <v-alert error v-bind:value="!project.projectkey" class="mt-0 elevation-1">
         There is no key set for this project, there will be no data collected.
       </v-alert>
-      <div class="padding">
+      <div class="pt-2 pl-2 pr-2">
         <v-row>
           <v-col xs12 lg9>
             <v-row v-if="renderCharts">
@@ -43,7 +43,7 @@ export default {
         'hddram': {
           title: 'Usage',
           name: 'hddram',
-          values: ['hdd', 'ram'],
+          values: ['hdd', 'ram', 'cpu'],
           slug: 'usage'
         },
         'network': {

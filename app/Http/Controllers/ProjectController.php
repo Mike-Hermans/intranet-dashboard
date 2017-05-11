@@ -61,6 +61,7 @@ class ProjectController extends Controller {
       $table->integer('timestamp');
       $table->float('hdd', 5, 2);
       $table->float('ram', 5, 2);
+      $table->float('cpu', 5, 2);
       $table->float('rx', 8, 2);
       $table->float('tx', 8, 2);
       $table->float('page', 9, 3);

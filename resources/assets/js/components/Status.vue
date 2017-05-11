@@ -58,11 +58,15 @@
         </v-card-text>
       </v-tab-content>
       <v-tab-content :id="'tabs-3'" slot="content">
-        <v-card-text v-if="status">
-          <v-card-row height="60px">
-            <v-icon class="mr-3">events</v-icon>
+        <v-card-text v-if="plugins">
+          <v-card-row
+          height="60px"
+          v-for="(plugin, i) in plugins"
+          :key="i">
+            <v-icon class="mr-3">power</v-icon>
             <div>
-              <div>No recent events</div>
+              <div>{{ plugin.name }}</div>
+              <strong>Version: {{ plugin.version }}</strong>
             </div>
           </v-card-row>
         </v-card-text>
@@ -78,18 +82,25 @@
     data() {
       return {
         status: null,
-        statusurl: '/api/project/' + this.$route.params.project + '/status'
+        apiurl: '/api/project/' + this.$route.params.project + '/',
+        plugins: null
       }
     },
     methods: {
       getStatus() {
-        axios.get(this.statusurl)
-        .then(({data}) => { this.status = data; console.log(this.status) })
+        axios.get(this.apiurl + 'status')
+        .then(({data}) => this.status = data)
+        .catch(error => console.log(error))
+      },
+      getPlugins() {
+        axios.get(this.apiurl + 'plugins')
+        .then(({data}) => this.plugins = data)
         .catch(error => console.log(error))
       }
     },
     mounted() {
       this.getStatus()
+      this.getPlugins()
     },
     watch: {
       '$route' (to, from) {

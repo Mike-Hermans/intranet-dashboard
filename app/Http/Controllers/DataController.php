@@ -11,8 +11,12 @@ class DataController extends Controller {
 
   public function plugins($slug) {
     $this->verify_project($slug);
-    $table = $slug . '_plugins';
-    return $this->select($table);
+    $this->table = $slug . '_plugins';
+
+    $rows = \DB::table($this->table)
+    ->where('timestamp', '=', \DB::table($this->table)->max('timestamp'))
+    ->get();
+    return $rows;
   }
 
   public function tables($slug, $table = false) {
@@ -99,10 +103,6 @@ class DataController extends Controller {
     }
 
     return 0;
-  }
-
-  private function select() {
-    return \DB::table($this->table)->get();
   }
 
   private function verify_project( $slug ) {
