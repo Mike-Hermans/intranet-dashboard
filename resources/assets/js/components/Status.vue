@@ -76,7 +76,6 @@
 </template>
 
 <script>
-  import { EventBus } from '../EventBus'
   export default {
     name: 'status',
     data() {
@@ -105,8 +104,9 @@
     watch: {
       '$route' (to, from) {
         if (to.params.project != from.params.project) {
-          this.statusurl = '/api/project/' + to.params.project + '/status'
+          this.apiurl = '/api/project/' + to.params.project + '/'
           this.getStatus()
+          this.getPlugins()
         }
       }
     }
