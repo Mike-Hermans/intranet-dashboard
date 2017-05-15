@@ -5,14 +5,14 @@
       </v-alert>
       <div class="pt-2 pl-2 pr-2">
         <v-row>
-          <v-col xs12 lg9>
+          <v-col xs12 xl9>
             <v-row v-if="renderCharts">
-              <v-col lg6 v-for="(graph, i) in graphData" :key="i">
+              <v-col xs12 md6 mb-3 v-for="(graph, i) in graphData" :key="i">
                 <chart :data="graph"></chart>
               </v-col>
             </v-row>
           </v-col>
-          <v-col xs12 lg3>
+          <v-col xs12 xl3>
             <status></status>
           </v-col>
         </v-row>

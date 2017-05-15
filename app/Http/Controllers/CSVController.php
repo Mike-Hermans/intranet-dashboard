@@ -15,7 +15,7 @@ class CSVController extends Controller {
     $this->table = $slug . '_usage';
 
     $items = \DB::table($this->table)->get()->toArray();
-    $columns = array('timestamp', 'hdd', 'ram', 'rx', 'tx', 'page');
+    $columns = array('timestamp', 'hdd', 'ram', 'rx', 'tx', 'page', 'cpu');
     $response = new StreamedResponse( function() use ($items, $columns){
         // Open output stream
       $file = fopen('php://output', 'w');
