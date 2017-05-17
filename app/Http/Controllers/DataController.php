@@ -105,6 +105,18 @@ class DataController extends Controller {
     return 0;
   }
 
+  public function events($slug) {
+    $this->verify_project($slug);
+    $events = \DB::table('events')
+    ->select('timestamp', 'event')
+    ->where('project_id', $this->project->id)
+    ->latest('timestamp')->limit(8)
+    ->get()
+    ->toArray();
+
+    return $events;
+  }
+
   private function verify_project( $slug ) {
     $project = \App\Project::where('slug', '=', $slug)->first();
     if ($project == null) {

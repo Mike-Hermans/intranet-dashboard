@@ -32,6 +32,7 @@ Route::get('/api/project/{slug}/tables/{table?}', 'DataController@tables');
 
 // Get status, with optional from date
 Route::get('/api/project/{slug}/status/{date?}', 'DataController@status');
+Route::get('/api/project/{slug}/events', 'DataController@events');
 
 // Return CSV
 Route::get('/api/project/{slug}/csv/usage', 'CSVController@usage');

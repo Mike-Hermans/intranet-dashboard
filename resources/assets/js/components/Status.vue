@@ -22,6 +22,13 @@
             </div>
           </v-card-row>
         </v-card-text>
+        <v-divider v-if="events"></v-divider>
+        <v-card-text v-for="(event, i) in events" :key="i" height="60px">
+          <div>
+            <div>{{ event.event }}</div>
+            <strong>{{ event.timestamp * 1000 | moment("from")}}</strong>
+          </div>
+        </v-card-text>
       </v-tab-content>
       <v-tab-content :id="'tabs-2'" slot="content">
         <v-card-text v-if="status">
@@ -82,31 +89,28 @@
       return {
         status: null,
         apiurl: '/api/project/' + this.$route.params.project + '/',
-        plugins: null
+        plugins: null,
+        events: null,
+        statusitems: ['status', 'plugins', 'events']
       }
     },
     methods: {
-      getStatus() {
-        axios.get(this.apiurl + 'status')
-        .then(({data}) => this.status = data)
-        .catch(error => console.log(error))
-      },
-      getPlugins() {
-        axios.get(this.apiurl + 'plugins')
-        .then(({data}) => this.plugins = data)
-        .catch(error => console.log(error))
+      getData() {
+        for (let item of this.statusitems) {
+          axios.get(this.apiurl + item)
+          .then(({data}) => this[item] = data)
+          .catch(error => console.log(error))
+        }
       }
     },
     mounted() {
-      this.getStatus()
-      this.getPlugins()
+      this.getData()
     },
     watch: {
       '$route' (to, from) {
         if (to.params.project != from.params.project) {
           this.apiurl = '/api/project/' + to.params.project + '/'
-          this.getStatus()
-          this.getPlugins()
+          this.getData()
         }
       }
     }
