@@ -14,7 +14,13 @@ class CSVController extends Controller {
     $this->verify_project($slug);
     $this->table = $slug . '_usage';
 
-    $items = \DB::table($this->table)->get()->toArray();
+    $items = \DB::table($this->table)
+    ->when(is_numeric(Input::get('top')), function ($query) {
+      return $query->latest('timestamp')->limit(Input::get('top'));
+
+    })
+    ->get()->toArray();
+    $items = array_reverse($items);
     $columns = array('timestamp', 'hdd', 'ram', 'rx', 'tx', 'page', 'cpu');
     $response = new StreamedResponse( function() use ($items, $columns){
         // Open output stream
@@ -72,4 +78,14 @@ class CSVController extends Controller {
     return $query;
   }
 
+  private function top($query) {
+    $top = false;
+
+    if ( is_numeric(Input::get('top')) ) {
+      $top = Input::get('top');
+      $query->orderBy('timestamp', 'desc')->limit($top);
+    }
+
+    return $query;
+  }
 }
