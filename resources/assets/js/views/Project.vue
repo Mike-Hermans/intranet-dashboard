@@ -12,7 +12,7 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col xs12 xl3>
+          <v-col xs12 xl3 mb-3>
             <status></status>
           </v-col>
         </v-row>
