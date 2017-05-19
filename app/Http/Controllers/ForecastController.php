@@ -10,6 +10,7 @@ class ForecastController extends Controller {
   private $type;
   private $message;
   private $last_point;
+  private $csv_file;
 
   public function get_forecast($slug, $type) {
     $this->slug = $slug;
@@ -38,8 +39,8 @@ class ForecastController extends Controller {
     $this->generate_csv();
 
     // Get the result for the forecast data
-    //$forecast = shell_exec('cd $(pwd)/r; Rscript forecast.R cpu_lite.csv');
-    $forecast = shell_exec('cd $(pwd)/r; cat tempdata.txt');
+    $forecast = shell_exec('cd $(pwd)/r; Rscript forecast.R ' . $this->csv_file);
+
     // Remove the header
     $forecast = preg_replace('/^.+\n/', '', $forecast);
 
@@ -65,7 +66,7 @@ class ForecastController extends Controller {
       }
     }
     // Remove the generated CSV file
-    shell_exec('rm $(pwd)/r/' . $this->slug . '_' . $this->type . '.csv');
+    shell_exec('rm $(pwd)/r/' . $this->csv_file);
     $this->save_forecast(json_encode($forecast));
   }
 
@@ -112,7 +113,7 @@ class ForecastController extends Controller {
     ->toArray();
     $this->last_point = $items[count($items) - 1]->timestamp;
     $items = array_reverse($items);
-    $file = fopen( 'r/' . $this->slug . '_' . $type . '.csv', 'a+' );
+    $file = fopen($this->csv_file, 'a+' );
     fputcsv( $file, array($type) );
     $count = 0;
     foreach ( $items as $item ) {
@@ -136,8 +137,9 @@ class ForecastController extends Controller {
       $this->message = 'project_not_found';
       return false;
     }
+    $this->csv_file = $this->slug . '_' . $this->type . '.csv';
     // If file exists, we're already forecasting the data.
-    if (file_exists('r/' . $this->slug . '_' . $this->type . '.csv' )) {
+    if (file_exists('r/' . $this->csv_file)) {
       $this->message = 'forecast_in_progress';
       return false;
     }
