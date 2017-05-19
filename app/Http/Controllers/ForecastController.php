@@ -21,8 +21,7 @@ class ForecastController extends Controller {
     $forecast = \App\Forecast::select('forecast')
     ->where('project_id', '=', $this->project['id'])
     ->where('type', '=', $type)
-    ->first()
-    ->toArray();
+    ->first();
 
     echo $forecast['forecast'];
   }
@@ -67,7 +66,7 @@ class ForecastController extends Controller {
     }
     // Remove the generated CSV file
     shell_exec('rm $(pwd)/r/' . $this->csv_file);
-    $this->save_forecast(json_encode($forecast));
+    $this->save_forecast(json_encode($forecast, JSON_NUMERIC_CHECK));
   }
 
   private function save_forecast($forecast_values) {
@@ -155,3 +154,4 @@ class ForecastController extends Controller {
     return true;
   }
 }
+

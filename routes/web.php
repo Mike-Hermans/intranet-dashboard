@@ -37,13 +37,15 @@ Route::get('/api/project/{slug}/status/{date?}', 'DataController@status');
 Route::get('/api/project/{slug}/events', 'DataController@events');
 
 // Get the forecast for a type
-Route::get('/api/project/{slug}/forecast/{type}', 'ForecastController@get_forecast');
+Route::get('/api/project/{slug}/forecast/{type}', 'ForecastController@get_forecast')
+      ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
 // Return CSV
 Route::get('/csv/{slug}', 'CSVController@usage');
 
 // Start the forecast for a given project
-Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast');
+Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast')
+      ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
 
 Route::post('/api/project/{slug}/key', 'ProjectController@set_key');

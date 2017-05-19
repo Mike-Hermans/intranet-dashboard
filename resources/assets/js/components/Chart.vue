@@ -16,6 +16,7 @@
     props: ['data'],
     data () {
       return {
+        forecast: null,
         options: {
           chart: {
             type: 'line',
@@ -78,6 +79,18 @@
           axios.get('/api/project/' + this.$route.params.project + '/' + this.data.slug + '/' + value)
           .then(({data}) => this.$refs[this.data.name].chart.addSeries({ name: value, data }))
           .catch(error => console.log(error))
+
+          if (value == 'cpu') {
+            axios.get('/api/project/' + this.$route.params.project + '/forecast/' + value)
+            .then(({data}) => {
+              let serie = []
+              for (let [key, fpoint] of Object.entries(data)) {
+                serie.push([fpoint.point * 1000, fpoint.forecast])
+              }
+              this.forecast = serie
+              this.$refs[this.data.name].chart.addSeries({ name: value + '_forecast', data: serie })
+            })
+          }
         }
       }
     },
