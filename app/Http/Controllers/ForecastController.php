@@ -113,7 +113,7 @@ class ForecastController extends Controller {
     ->toArray();
     $this->last_point = $items[count($items) - 1]->timestamp;
     $items = array_reverse($items);
-    $file = fopen($this->csv_file, 'a+' );
+    $file = fopen('r/' . $this->csv_file, 'a+' );
     fputcsv( $file, array($type) );
     $count = 0;
     foreach ( $items as $item ) {
