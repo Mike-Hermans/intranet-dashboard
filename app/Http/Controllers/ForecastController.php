@@ -51,8 +51,6 @@ class ForecastController extends Controller {
     $point = $this->last_point;
     foreach ($lines as $line) {
       if (!empty($line)) {
-        // Add 10 minutes to the last point
-        $point += 600;
         $values = preg_split('/\s+/', trim($line));
         $forecast[] = array(
           'point' => $point,
@@ -62,6 +60,8 @@ class ForecastController extends Controller {
           'lo95' => $values[4],
           'hi95' => $values[5]
         );
+        // Add 10 minutes to the last point
+        $point += 600;
       }
     }
     // Remove the generated CSV file

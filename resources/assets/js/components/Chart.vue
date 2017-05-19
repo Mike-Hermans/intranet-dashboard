@@ -16,7 +16,6 @@
     props: ['data'],
     data () {
       return {
-        forecast: null,
         options: {
           chart: {
             type: 'line',
@@ -66,7 +65,8 @@
           tooltip: {
               pointFormat: '{series.name}: <b>{point.y:.2f}</b><br/>',
               split: true,
-              shared: false
+              shared: false,
+
           },
           credits: false,
           series: []
@@ -87,21 +87,21 @@
               let eighty = []
               for (let [key, fpoint] of Object.entries(data)) {
                 serie.push([fpoint.point * 1000, fpoint.forecast])
-                eighty.push([fpoint.point * 1000, fpoint.lo80, fpoint.hi80])
+                eighty.push([fpoint.point * 1000, fpoint.lo95, fpoint.hi95])
               }
-              this.forecast = eighty
               this.$refs[this.data.name].chart.addSeries({
                 id: value + '_forecast',
                 name: value + '_forecast',
                 data: serie,
                 zIndex: 1,
                 marker: {
+                    enabled: true,
                     fillColor: 'white',
                     lineWidth: 2
                 }
               })
               this.$refs[this.data.name].chart.addSeries({
-                name: '80% Range',
+                name: '95% Range',
                 data: eighty,
                 type: 'arearange',
                 lineWidth: 0,
