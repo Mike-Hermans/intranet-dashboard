@@ -32,10 +32,19 @@ Route::get('/api/project/{slug}/tables/{table?}', 'DataController@tables');
 
 // Get status, with optional from date
 Route::get('/api/project/{slug}/status/{date?}', 'DataController@status');
+
+// Get the most recent events for a project
 Route::get('/api/project/{slug}/events', 'DataController@events');
 
+// Get the forecast for a type
+Route::get('/api/project/{slug}/forecast/{type}', 'ForecastController@get_forecast');
+
 // Return CSV
-Route::get('/api/project/{slug}/csv/usage', 'CSVController@usage');
+Route::get('/csv/{slug}', 'CSVController@usage');
+
+// Start the forecast for a given project
+Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast');
+
 
 Route::post('/api/project/{slug}/key', 'ProjectController@set_key');
 Route::post('/api/add', 'ProjectController@add_project');

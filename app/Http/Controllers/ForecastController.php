@@ -1,0 +1,155 @@
+<?php
+
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use Illuminate\Database\Schema\Blueprint;
+
+class ForecastController extends Controller {
+  private $slug;
+  private $project;
+  private $type;
+  private $message;
+  private $last_point;
+
+  public function get_forecast($slug, $type) {
+    $this->slug = $slug;
+    if (!$this->verify_project()) {
+      die('project_not_found');
+    }
+
+    $forecast = \App\Forecast::select('forecast')
+    ->where('project_id', '=', $this->project['id'])
+    ->where('type', '=', $type)
+    ->first()
+    ->toArray();
+
+    echo $forecast['forecast'];
+  }
+
+  public function forecast($slug, $type) {
+    $this->slug = $slug;
+    $this->type = $type;
+
+    if ( ! $this->can_forecast()) {
+      die($this->message);
+    }
+
+    // At this moment we know the project exists, have it's ID and can forecast.
+    $this->generate_csv();
+
+    // Get the result for the forecast data
+    //$forecast = shell_exec('cd $(pwd)/r; Rscript forecast.R cpu_lite.csv');
+    $forecast = shell_exec('cd $(pwd)/r; cat tempdata.txt');
+    // Remove the header
+    $forecast = preg_replace('/^.+\n/', '', $forecast);
+
+    // Split the output into lines
+    $lines = explode("\n", $forecast);
+
+    // Convert the values into an array
+    $forecast = array();
+    $point = $this->last_point;
+    foreach ($lines as $line) {
+      if (!empty($line)) {
+        // Add 10 minutes to the last point
+        $point += 600;
+        $values = preg_split('/\s+/', trim($line));
+        $forecast[] = array(
+          'point' => $point,
+          'forecast' => $values[1],
+          'lo80' => $values[2],
+          'hi80' => $values[3],
+          'lo95' => $values[4],
+          'hi95' => $values[5]
+        );
+      }
+    }
+    // Remove the generated CSV file
+    shell_exec('rm $(pwd)/r/' . $this->slug . '_' . $this->type . '.csv');
+    $this->save_forecast(json_encode($forecast));
+  }
+
+  private function save_forecast($forecast_values) {
+    $forecast = \App\Forecast::select('id')
+    ->where('project_id', '=', $this->project['id'])
+    ->where('type', '=', $this->type)
+    ->first();
+
+    if ($forecast == null) {
+      $forecast = new \App\Forecast();
+      $forecast->project_id = $this->project['id'];
+      $forecast->type = $this->type;
+    }
+
+    $forecast->last_point = $this->last_point;
+    $forecast->forecast = $forecast_values;
+    $forecast->save();
+    echo('OK');
+  }
+
+  /*
+    Check if project exists and allows forecasting
+  */
+  private function verify_project() {
+    $project = \App\Project::select('id', 'slug')->where('slug', '=', $this->slug)->first();
+    if ( $project == null ) {
+      return false;
+    }
+    $this->project = $project;
+    return true;
+  }
+
+  /*
+    Generate a CSV containing every tenth value for the pas 5k values
+  */
+  private function generate_csv() {
+    $type = $this->type;
+    $items = \DB::table($this->project['slug'] . '_usage')
+    ->select('timestamp', $type)
+    ->latest('timestamp')
+    ->limit(5000)
+    ->get()
+    ->toArray();
+    $this->last_point = $items[count($items) - 1]->timestamp;
+    $items = array_reverse($items);
+    $file = fopen( 'r/' . $this->slug . '_' . $type . '.csv', 'a+' );
+    fputcsv( $file, array($type) );
+    $count = 0;
+    foreach ( $items as $item ) {
+        $count++;
+        if ($count % 10 == 0) {
+          fputcsv( $file, array($item->$type) );
+        }
+    }
+    fclose( $file );
+  }
+
+  /*
+    Check if we can forecast new data:
+    - Project exists and allows forecasting
+    - Forecast file does not (which means forecast is in progress)
+    - Forecast does not exist OR is older than one hour
+    - There are at least 5k values
+  */
+  private function can_forecast() {
+    if ( !$this->verify_project()) {
+      $this->message = 'project_not_found';
+      return false;
+    }
+    // If file exists, we're already forecasting the data.
+    if (file_exists('r/' . $this->slug . '_' . $this->type . '.csv' )) {
+      $this->message = 'forecast_in_progress';
+      return false;
+    }
+
+    $count = \DB::table($this->project['slug'] . '_usage')
+    ->select('timestamp', $this->type)->count();
+
+    if ($count < 5000) {
+      $this->message = 'not_enough_values_' . $count;
+      return false;
+    }
+
+    return true;
+  }
+}
