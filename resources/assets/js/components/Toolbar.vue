@@ -1,7 +1,7 @@
 <template>
     <v-toolbar fixed>
-      <v-toolbar-side-icon @click.native.stop="$parent.nav = !$parent.nav" class="hidden-lg-and-up" />
-      <v-toolbar-logo>{{ title }}</v-toolbar-logo>
+      <v-toolbar-side-icon light @click.native.stop="$parent.nav = !$parent.nav" />
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
     </v-toolbar>
 </template>
 

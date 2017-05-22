@@ -1,22 +1,20 @@
 <template>
     <div v-if="project">
-      <v-alert error v-bind:value="!project.projectkey" class="mt-0 elevation-1">
-        There is no key set for this project, there will be no data collected.
-      </v-alert>
-      <div class="pt-2 pl-2 pr-2">
-        <v-row>
-          <v-col xs12 xl9>
-            <v-row v-if="renderCharts">
-              <v-col xs12 md6 mb-3 v-for="(graph, i) in graphData" :key="i">
-                <chart :data="graph"></chart>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col xs12 xl3 mb-3>
-            <status></status>
-          </v-col>
-        </v-row>
-      </div>
+    <v-alert error v-bind:value="!project.projectkey" class="mt-0 elevation-1">
+      There is no key set for this project, there will be no data collected.
+    </v-alert>
+      <v-layout row wrap>
+        <v-flex xs12 lg9>
+          <v-layout row wrap v-if="renderCharts">
+            <v-flex xs12 md6 mb-4 order-md2 v-for="(graph, i) in graphData" :key="i">
+              <chart :data="graph"></chart>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex xs12 lg3 order-md1>
+          <status></status>
+        </v-flex>
+      </v-layout>
     </div>
     <div v-else class="loading-div">
       <v-progress-circular

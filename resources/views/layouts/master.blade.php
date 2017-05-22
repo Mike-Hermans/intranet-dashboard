@@ -13,17 +13,13 @@
         </script>
     </head>
     <body>
-      <v-app id="app" with left-fixed-sidebar top-fixed-toolbar>
-        <header>
-          <toolbar></toolbar>
-        </header>
+      <v-app id="app">
+        <sidebar></sidebar>
+        <toolbar></toolbar>
         <main>
-          <sidebar></sidebar>
-          <v-content>
-            <v-container fluid>
-              <router-view></router-view>
-            </v-container>
-          </v-content>
+          <v-container fluid>
+            <router-view></router-view>
+          </v-container>
         </main>
       </v-app>
       <script src="/js/app.js"></script>

@@ -1,7 +1,7 @@
 <template>
   <div class="pt-2 pl-2 pr-2">
-    <v-row>
-      <v-col xs3 mb-3 v-for="(project, i) in projects" :key="i">
+    <v-layout>
+      <v-flex xs3 mb-3 v-for="(project, i) in projects" :key="i">
         <v-card>
           <v-card-row style="height: 100px">
             <v-card-title>
@@ -9,8 +9,8 @@
             </v-card-title>
           </v-card-row>
         </v-card>
-      </v-col>
-    </v-row>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 

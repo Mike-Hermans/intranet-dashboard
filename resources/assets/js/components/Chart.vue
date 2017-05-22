@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  //import EventBus from '../EventBus.js'
+  import EventBus from '../EventBus.js'
   export default {
     name: 'chart',
     props: ['data'],
@@ -23,7 +23,12 @@
           },
           plotOptions: {
             series: {
-              showInNavigator: true
+              showInNavigator: true,
+              cursor: 'pointer',
+              events: {
+                // Divide by 1000 to convert to seconds
+                //click: (e) => EventBus.$emit('get-status', e.point.x / 1000)
+              }
             }
           },
           scrollbar: {

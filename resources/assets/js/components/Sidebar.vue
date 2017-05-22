@@ -1,6 +1,6 @@
 <template>
-  <v-sidebar v-model="$parent.nav" fixed class="mt-0 scroll-y">
-    <v-list dense>
+  <v-navigation-drawer dark :mini-variant.sync="mini" persistent v-model="$parent.nav">
+    <v-list>
       <!-- Group item -->
       <template v-for="(item,i) in itemGroup">
         <template v-if="item.items">
@@ -9,11 +9,11 @@
             <v-list-item slot="item">
               <v-list-tile ripple>
                 <v-list-tile-action>
-                  <v-icon>{{item.icon}}</v-icon>
+                  <v-icon light>{{item.icon}}</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-title v-text="item.title" />
                 <v-list-tile-action>
-                  <v-icon>keyboard_arrow_down</v-icon>
+                  <v-icon light>keyboard_arrow_down</v-icon>
                 </v-list-tile-action>
               </v-list-tile>
             </v-list-item>
@@ -25,7 +25,7 @@
                   <form @submit.prevent="addProject()">
                     <v-list-tile class="containsinput">
                       <v-text-field
-                      dark
+                      light
                       v-model="newProjectName"
                       name="name"
                       label="Project name"
@@ -56,7 +56,7 @@
           <v-list-item>
             <v-list-tile :href="item.href" router ripple>
               <v-list-tile-action>
-                <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+                <v-icon light v-if="item.icon">{{ item.icon }}</v-icon>
               </v-list-tile-action>
               <v-list-tile-title v-text="item.title" />
             </v-list-tile>
@@ -64,7 +64,7 @@
         </template>
       </template>
     </v-list>
-  </v-sidebar>
+  </v-navigation-drawer>
 </template>
 
 <script>
@@ -87,7 +87,8 @@ export default {
       ],
       itemGroup: this.defaultItemGroup,
       newProjectName: '',
-      addProjectGroupActive: false
+      addProjectGroupActive: false,
+      mini: false
     }
   },
   mounted() {
