@@ -4,15 +4,15 @@
       There is no key set for this project, there will be no data collected.
     </v-alert>
       <v-layout row wrap>
-        <v-flex xs12 lg9>
+        <v-flex xs12 lg3 mb-4 order-lg2>
+          <status></status>
+        </v-flex>
+        <v-flex xs12 lg9 order-lg1>
           <v-layout row wrap v-if="renderCharts">
-            <v-flex xs12 md6 mb-4 order-md2 v-for="(graph, i) in graphData" :key="i">
+            <v-flex xs12 sm6 mb-4 v-for="(graph, i) in graphData" :key="i">
               <chart :data="graph"></chart>
             </v-flex>
           </v-layout>
-        </v-flex>
-        <v-flex xs12 lg3 order-md1>
-          <status></status>
         </v-flex>
       </v-layout>
     </div>
