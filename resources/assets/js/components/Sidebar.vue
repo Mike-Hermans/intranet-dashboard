@@ -94,7 +94,7 @@ export default {
   },
   mounted() {
     this.createItemGroup()
-    EventBus.$on('refresh-toolbar', this.createItemGroup)
+    EventBus.$on('refresh-sidebar', this.createItemGroup)
   },
   methods: {
     createItemGroup( data ) {

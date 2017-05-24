@@ -73,12 +73,17 @@
     methods: {
       createChart() {
         for (let [key, value] of Object.entries(this.data.values)) {
-          axios.get('/api/project/' + this.$route.params.project + '/' + this.data.slug + '/' + value)
-          .then(({data}) => this.$refs[this.data.name].chart.addSeries({ name: value, data }))
+          axios.get('/api/project/' + this.$route.params.project + '/' + this.data.slug + '/' + value.value)
+          .then(({data}) => this.$refs[this.data.name].chart.addSeries({
+            id: value.value,
+            name: value.value,
+            color: value.color,
+            data
+          }))
           .catch(error => console.log(error))
 
-          if (value == 'cpu') {
-            axios.get('/api/project/' + this.$route.params.project + '/forecast/' + value)
+          if (value.value == 'cpu') {
+            axios.get('/api/project/' + this.$route.params.project + '/forecast/' + value.value)
             .then(({data}) => {
               let serie = []
               let eighty = []
@@ -87,8 +92,9 @@
                 eighty.push([fpoint.point * 1000, fpoint.lo95, fpoint.hi95])
               }
               this.$refs[this.data.name].chart.addSeries({
-                id: value + '_forecast',
-                name: value + '_forecast',
+                id: value.value + '_forecast',
+                name: value.value + '_forecast',
+                color: '000000',
                 data: serie,
                 zIndex: 1,
                 marker: {
@@ -101,8 +107,9 @@
                 name: '95% Range',
                 data: eighty,
                 type: 'arearange',
+                color: value.color,
                 lineWidth: 0,
-                linkedTo: value + '_forecast',
+                linkedTo: value.value + '_forecast',
                 fillOpacity: 0.3,
                 zIndex: 0
               })

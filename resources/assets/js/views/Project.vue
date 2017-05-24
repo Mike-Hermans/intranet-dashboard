@@ -41,13 +41,35 @@ export default {
         'hddram': {
           title: 'Usage',
           name: 'hddram',
-          values: ['hdd', 'ram', 'cpu'],
+          values: [
+            {
+              value: 'hdd',
+              color: '#2196f3'
+            },
+            {
+              value: 'ram',
+              color: '#3f51b5'
+            },
+            {
+              value: 'cpu',
+              color: '#ff9800'
+            }
+          ],
           slug: 'usage'
         },
         'network': {
           title: 'Network',
           name: 'network',
-          values: ['rx', 'tx'],
+          values: [
+            {
+              value: 'rx',
+              color: '#3f51b5'
+            },
+            {
+              value: 'tx',
+              color: '#ff9800'
+            }
+          ],
           slug: 'usage'
         },
         'tables': {
@@ -59,7 +81,12 @@ export default {
         'latency': {
           title: 'Latency',
           name: 'latency',
-          values: ['page'],
+          values: [
+            {
+              value: 'page',
+              color: '#2196f3'
+            }
+          ],
           slug: 'usage'
         }
       },
@@ -97,7 +124,12 @@ export default {
         // First, get table data
         axios.get(this.apiurl + 'tables?top=4')
         .then(({data}) => {
-          this.graphData.tables.values = data
+          for (let [i, value] of Object.entries(data)) {
+            this.graphData.tables.values.push({
+              value: value,
+              color: '#2196f3'
+            })
+          }
           this.renderCharts = true
         })
         .catch(error => console.log(error))
