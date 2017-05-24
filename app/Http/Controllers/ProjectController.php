@@ -119,16 +119,4 @@ class ProjectController extends Controller {
     }
     $this->project = $project;
   }
-
-  public function rename_tables() {
-    $projects = \App\Project::select()->get();
-    $tables = array('_usage', '_db', '_plugins');
-    foreach ($projects as $project) {
-      foreach( $tables as $table ) {
-        if (\Schema::hasTable($project->slug . $table)) {
-          \Schema::rename($project->slug . $table, $project->id . $table);
-        }
-      }
-    }
-  }
 }

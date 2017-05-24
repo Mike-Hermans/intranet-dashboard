@@ -53,5 +53,3 @@ Route::post('/api/add', 'ProjectController@add');
 
 // External connections
 Route::post('/api/collect', 'FetchDataController@collect');
-
-Route::get('/tablerename', 'ProjectController@rename_tables');
