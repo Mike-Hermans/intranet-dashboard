@@ -144,7 +144,15 @@ export default {
         this.settings.slug = data.slug
         this.settings.url = data.url
         this.saveButtonShowLoading = false;
-        EventBus.$emit('toolbar-settings', { title: this.project.name + " - Settings" })
+        EventBus.$emit('toolbar-settings', {
+          title: this.project.name + " - Settings" ,
+          icons: [
+            {
+              icon: 'clear',
+              url: '/#/project/' + this.project.slug
+            }
+          ]
+        })
       })
     },
     saveSettings() {
