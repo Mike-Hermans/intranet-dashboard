@@ -1,10 +1,11 @@
 <template>
-    <div v-if="project">
+  <div v-if="project">
     <v-alert error v-bind:value="!project.projectkey" class="mt-0 elevation-1">
-      There is no key set for this project, there will be no data collected.
+      There is no key set for this project, there will be no data collected. Click <router-link class="white-text" :to="'/settings/' + project.slug">here</router-link> to set a key.
     </v-alert>
       <v-layout row wrap>
         <v-flex xs12 lg3 mb-4 order-lg2>
+          <router-link :to="'/settings/' + project.slug">Settings</router-link>
           <status></status>
         </v-flex>
         <v-flex xs12 lg9 order-lg1>
@@ -15,14 +16,14 @@
           </v-layout>
         </v-flex>
       </v-layout>
-    </div>
-    <div v-else class="loading-div">
-      <v-progress-circular
-        indeterminate
-        v-bind:size="50"
-        class="primary--text"
-      />
-    </div>
+  </div>
+  <div v-else class="loading-div">
+    <v-progress-circular
+      indeterminate
+      v-bind:size="50"
+      class="primary--text"
+    />
+  </div>
 </template>
 <script>
 import { EventBus } from '../EventBus'

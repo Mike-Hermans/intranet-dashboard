@@ -12,7 +12,7 @@ class CSVController extends Controller {
 
   public function usage($slug) {
     $this->verify_project($slug);
-    $this->table = $slug . '_usage';
+    $this->table = $this->project->id . '_usage';
 
     $items = \DB::table($this->table)
     ->when(is_numeric(Input::get('top')), function ($query) {

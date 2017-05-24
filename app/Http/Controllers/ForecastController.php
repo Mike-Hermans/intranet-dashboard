@@ -104,7 +104,7 @@ class ForecastController extends Controller {
   */
   private function generate_csv() {
     $type = $this->type;
-    $items = \DB::table($this->project['slug'] . '_usage')
+    $items = \DB::table($this->project['id'] . '_usage')
     ->select('timestamp', $type)
     ->latest('timestamp')
     ->limit(5000)
@@ -143,7 +143,7 @@ class ForecastController extends Controller {
       return false;
     }
 
-    $count = \DB::table($this->project['slug'] . '_usage')
+    $count = \DB::table($this->project['id'] . '_usage')
     ->select('timestamp', $this->type)->count();
 
     if ($count < 5000) {

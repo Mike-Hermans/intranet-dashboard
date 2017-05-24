@@ -15,12 +15,13 @@ Route::get('/', function () {
     return view('home');
 });
 
+/*
+  Internal API
+*/
 Route::get('/api/projects', 'ProjectController@get_projects');
+
 Route::get('/api/project/{slug}', 'ProjectController@get_project');
 
-/*
-  API used by Javascript
-*/
 Route::get('/api/project/{slug}/usage/{type?}', 'DataController@usage')
       ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
@@ -47,9 +48,10 @@ Route::get('/csv/{slug}', 'CSVController@usage');
 Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast')
       ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
-
-Route::post('/api/project/{slug}/key', 'ProjectController@set_key');
-Route::post('/api/add', 'ProjectController@add_project');
+Route::post('/api/project/{slug}/update', 'ProjectController@update');
+Route::post('/api/add', 'ProjectController@add');
 
 // External connections
 Route::post('/api/collect', 'FetchDataController@collect');
+
+Route::get('/tablerename', 'ProjectController@rename_tables');

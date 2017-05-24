@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { EventBus } from '../EventBus'
 export default {
   data() {
     return {
@@ -85,29 +86,30 @@ export default {
         { divider: true },
         { header: 'Projects' }
       ],
-      itemGroup: this.defaultItemGroup,
+      itemGroup: null,
       newProjectName: '',
       addProjectGroupActive: false,
       mini: false
     }
   },
   mounted() {
-    this.itemGroup = this.defaultItemGroup
-    axios.get('/api/projects')
-    .then(({data}) => this.createItemGroup(data))
-    .catch((error) => console.log(error))
+    this.createItemGroup()
+    EventBus.$on('refresh-toolbar', this.createItemGroup)
   },
   methods: {
     createItemGroup( data ) {
-      let group = this.defaultItemGroup
-      for (let item of data) {
-        group.push({
-          title: item.name,
-          href: '/project/' + item.slug,
-          icon: 'timeline'
-        })
-      }
-      this.itemGroup = group
+      axios.get('/api/projects')
+      .then(({data}) => {
+        let group = JSON.parse(JSON.stringify(this.defaultItemGroup))
+        for (let item of data) {
+          group.push({
+            title: item.name,
+            href: '/project/' + item.slug,
+            icon: 'timeline'
+          })
+        }
+        this.itemGroup = group
+      })
     },
     addProject() {
       let querystring = require('querystring')

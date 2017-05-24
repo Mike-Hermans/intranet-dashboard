@@ -112,7 +112,7 @@ class FetchDataController extends Controller {
   }
 
   private function save_table_data($tables) {
-    $dbtable = $this->project->slug . '_db';
+    $dbtable = $this->project->id . '_db';
     foreach($tables as $table => $size) {
       $row = array(
         'timestamp' => $this->timestamp,
@@ -124,14 +124,14 @@ class FetchDataController extends Controller {
   }
 
   private function save_usage_data($usage) {
-    $table = $this->project->slug . '_usage';
+    $table = $this->project->id . '_usage';
     $usage['timestamp'] = $this->timestamp;
     $usage['page'] = $this->ping();
     \DB::table($table)->insert($usage);
   }
 
   private function save_plugin_data($plugins) {
-    $dbtable = $this->project->slug . '_plugins';
+    $dbtable = $this->project->id . '_plugins';
     foreach($plugins as $plugin) {
       $plugin['timestamp'] = $this->timestamp;
       \DB::table($dbtable)->insert($plugin);

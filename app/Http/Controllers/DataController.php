@@ -11,7 +11,7 @@ class DataController extends Controller {
 
   public function plugins($slug) {
     $this->verify_project($slug);
-    $this->table = $slug . '_plugins';
+    $this->table = $this->project->id . '_plugins';
 
     $rows = \DB::table($this->table)
     ->where('timestamp', '=', \DB::table($this->table)->max('timestamp'))
@@ -21,7 +21,7 @@ class DataController extends Controller {
 
   public function tables($slug, $table = false) {
     $this->verify_project($slug);
-    $this->table = $slug . '_db';
+    $this->table = $this->project->id . '_db';
     if ( ! $table ) {
       return $this->list_tables();
     }
@@ -64,7 +64,7 @@ class DataController extends Controller {
 
   public function usage($slug, $type = false) {
     $this->verify_project($slug);
-    $this->table = $slug . '_usage';
+    $this->table = $this->project->id . '_usage';
 
     $items = \DB::table($this->table)
     ->when($type, function($query) use ($type) {
@@ -148,7 +148,7 @@ class DataController extends Controller {
       $query->where('timestamp', '=', $on);
     } else {
       // If no time is selected, use default
-      $query->where('timestamp', '>=', strtotime('240 hours ago'));
+      $query->where('timestamp', '>=', strtotime('7 days ago'));
     }
     return $query;
   }

@@ -10,7 +10,6 @@
 </template>
 
 <script>
-  import EventBus from '../EventBus.js'
   export default {
     name: 'chart',
     props: ['data'],
@@ -27,7 +26,7 @@
               cursor: 'pointer',
               events: {
                 // Divide by 1000 to convert to seconds
-                //click: (e) => EventBus.$emit('get-status', e.point.x / 1000)
+                //click: (e) => this.test()
               }
             }
           },
@@ -43,17 +42,10 @@
               type: 'day',
               count: 1,
               text: '1d'
-            }, {
-              type: 'month',
-              count: 1,
-              text: '1m'
-            }, {
-              type: 'year',
-              count: 1,
-              text: '1y'
-            }, {
+            },
+            {
               type: 'all',
-              text: 'All'
+              text: '1w'
             }],
             inputEnabled: false, // it supports only days
             selected: 1 // default is 1 day

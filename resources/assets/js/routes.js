@@ -10,6 +10,10 @@ let routes = [
         component: require('./views/Project')
     },
     {
+        path: '/settings/:project',
+        component: require('./views/Settings')
+    },
+    {
       path: '/test/home-1',
       component: require('./test/Home1')
     },
