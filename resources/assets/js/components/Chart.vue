@@ -110,7 +110,7 @@
                 color: value.color,
                 lineWidth: 0,
                 linkedTo: value.value + '_forecast',
-                fillOpacity: 0.3,
+                fillOpacity: 0.2,
                 zIndex: 0
               })
             })

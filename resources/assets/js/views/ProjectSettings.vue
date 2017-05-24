@@ -63,7 +63,7 @@
           name="display-name"
           label="Display Name"
           id="display-name"
-          v-model="settings.displayname"
+          v-model="settings.name"
         ></v-text-field>
       </v-flex>
     </v-layout>
@@ -110,7 +110,7 @@ export default {
         allowEditProjectKey: false,
         allowEditProjectSlug: false,
         projectkey: "",
-        displayname: "",
+        name: "",
         slug: "",
         url: ""
       }
@@ -125,7 +125,7 @@ export default {
         }
         this.project = data
         this.settings.projectkey = data.projectkey
-        this.settings.displayname = data.name
+        this.settings.name = data.name
         this.settings.slug = data.slug
         this.settings.url = data.url
         this.saveButtonShowLoading = false;

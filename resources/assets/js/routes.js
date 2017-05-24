@@ -11,7 +11,7 @@ let routes = [
     },
     {
         path: '/settings/:project',
-        component: require('./views/Settings')
+        component: require('./views/ProjectSettings')
     },
     {
       path: '/test/home-1',

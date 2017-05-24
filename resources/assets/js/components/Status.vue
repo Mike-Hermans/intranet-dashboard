@@ -73,10 +73,12 @@
           height="60px"
           v-for="(plugin, i) in plugins"
           :key="i">
-            <v-icon class="mr-3">power</v-icon>
+            <v-icon class="mr-3" v-if="plugin.active">power</v-icon>
+            <v-icon class="mr-3" v-else>remove</v-icon>
             <div>
               <div>{{ plugin.name }}</div>
-              <strong>Version: {{ plugin.version }}</strong>
+              <strong>Version: {{ plugin.version }} </strong>
+              <strong v-if="plugin.new_version"> ({{ plugin.new_version }})</strong>
             </div>
           </v-card-row>
         </v-card-text>
