@@ -5,7 +5,7 @@
         <v-layout row>
           <v-flex xs12>
             <v-card-text>
-              <v-layout row>
+              <v-layout row wrap>
                 <v-flex xs12 sm6>
                   <v-checkbox
                     label="Allow overwrite Project Key"
@@ -144,7 +144,7 @@ export default {
         this.settings.slug = data.slug
         this.settings.url = data.url
         this.saveButtonShowLoading = false;
-        EventBus.$emit('toolbar-title', this.project.name + " - Settings")
+        EventBus.$emit('toolbar-settings', { title: this.project.name + " - Settings" })
       })
     },
     saveSettings() {

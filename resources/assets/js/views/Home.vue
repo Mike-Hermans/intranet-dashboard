@@ -13,7 +13,7 @@
       }
     },
     mounted() {
-      EventBus.$emit('toolbar-title', 'Status')
+      EventBus.$emit('toolbar-settings', { title: 'Status' })
     }
   }
 </script>

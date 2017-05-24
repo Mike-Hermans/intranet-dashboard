@@ -1,11 +1,10 @@
 <template>
   <div v-if="project">
     <v-alert error v-bind:value="!project.projectkey" class="mt-0 elevation-1">
-      There is no key set for this project, there will be no data collected. Click <router-link class="white-text" :to="'/settings/' + project.slug">here</router-link> to set a key.
+      There is no key set for this project, there will be no data collected.
     </v-alert>
       <v-layout row wrap>
         <v-flex xs12 lg3 mb-4 order-lg2>
-          <router-link :to="'/settings/' + project.slug">Settings</router-link>
           <status></status>
         </v-flex>
         <v-flex xs12 lg9 order-lg1>
@@ -85,7 +84,15 @@ export default {
       .then(({data}) => {
         this.project = data
         // Change the toolbar title
-        EventBus.$emit('toolbar-title', this.project.name)
+        EventBus.$emit('toolbar-settings', {
+          title: this.project.name,
+          icons: [
+            {
+              icon: 'settings',
+              url: '/#/settings/' + this.project.slug
+            }
+          ]
+        })
 
         // First, get table data
         axios.get(this.apiurl + 'tables?top=4')
