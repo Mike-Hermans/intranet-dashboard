@@ -20,7 +20,6 @@ class CSVController extends Controller {
 
     })
     ->get()->toArray();
-    $items = array_reverse($items);
     $columns = array('timestamp', 'hdd', 'ram', 'rx', 'tx', 'page', 'cpu');
     $response = new StreamedResponse( function() use ($items, $columns){
         // Open output stream
