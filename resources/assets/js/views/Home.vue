@@ -13,7 +13,15 @@
       }
     },
     mounted() {
-      EventBus.$emit('toolbar-settings', { title: 'Status' })
+      EventBus.$emit('toolbar-settings', {
+        title: 'Home',
+        icons: [
+          {
+            icon: 'settings',
+            url: '/#/settings/'
+          }
+        ]
+      })
     }
   }
 </script>

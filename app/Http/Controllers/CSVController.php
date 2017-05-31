@@ -15,11 +15,13 @@ class CSVController extends Controller {
     $this->table = $this->project->id . '_usage';
 
     $items = \DB::table($this->table)
+    ->latest('timestamp')
     ->when(is_numeric(Input::get('top')), function ($query) {
-      return $query->latest('timestamp')->limit(Input::get('top'));
+      return $query->limit(Input::get('top'));
 
     })
     ->get()->toArray();
+    $items = array_reverse($items);
     $columns = array('timestamp', 'hdd', 'ram', 'rx', 'tx', 'page', 'cpu');
     $response = new StreamedResponse( function() use ($items, $columns){
         // Open output stream

@@ -1,85 +1,121 @@
 <template>
   <div>
-    <v-layout row>
-      <v-flex xs12>
-        <v-card-text>
-          <v-layout row wrap>
-            <v-flex xs12 sm6>
-              <v-checkbox
-                label="Allow overwrite Project Key"
-                v-model="settings.allowEditProjectKey"
-              ></v-checkbox>
-            </v-flex>
-            <v-flex xs12 sm6>
-              <v-checkbox
-                label="Allow overwrite Project Slug"
-                v-model="settings.allowEditProjectSlug"
-              ></v-checkbox>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
+    <v-layout row wrap>
+      <v-flex xs12 lg6>
+        <h3>Project Settings</h3>
+        <v-layout row>
+          <v-flex xs12>
+            <v-card-text>
+              <v-layout row wrap>
+                <v-flex xs12 sm6>
+                  <v-checkbox
+                    label="Allow overwrite Project Key"
+                    v-model="settings.allowEditProjectKey"
+                  ></v-checkbox>
+                </v-flex>
+                <v-flex xs12 sm6>
+                  <v-checkbox
+                    label="Allow overwrite Project Slug"
+                    v-model="settings.allowEditProjectSlug"
+                  ></v-checkbox>
+                </v-flex>
+              </v-layout>
+            </v-card-text>
+          </v-flex>
+        </v-layout>
+        <v-layout row v-if="settings.allowEditProjectKey">
+          <v-flex sm4 hidden-xs-only>
+            <v-subheader>
+              Project Key
+            </v-subheader>
+          </v-flex>
+          <v-flex xs12 sm8>
+            <v-text-field
+              name="project-key"
+              label="Project Key"
+              id="project-key"
+              :disabled="!settings.allowEditProjectKey"
+              v-model="settings.projectkey"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row v-if="settings.allowEditProjectSlug">
+          <v-flex sm4 hidden-xs-only>
+            <v-subheader>
+              Project Slug
+            </v-subheader>
+          </v-flex>
+          <v-flex xs12 sm8>
+            <v-text-field
+              name="project-slug"
+              label="Project Slug"
+              id="project-slug"
+              :disabled="!settings.allowEditProjectSlug"
+              v-model="settings.slug"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row>
+          <v-flex xs12 sm4 hidden-xs-only>
+            <v-subheader>
+              Display Name
+            </v-subheader>
+          </v-flex>
+          <v-flex xs12 sm8>
+            <v-text-field
+              name="display-name"
+              label="Display Name"
+              id="display-name"
+              v-model="settings.name"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row>
+          <v-flex xs12 sm4 hidden-xs-only>
+            <v-subheader>
+              Project URL
+            </v-subheader>
+          </v-flex>
+          <v-flex xs12 sm8>
+            <v-text-field
+              name="project-url"
+              label="Project URL"
+              id="project-url"
+              v-model="settings.url"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
       </v-flex>
-    </v-layout>
-    <v-layout row v-if="settings.allowEditProjectKey">
-      <v-flex sm4 hidden-xs-only>
-        <v-subheader>
-          Project Key
-        </v-subheader>
-      </v-flex>
-      <v-flex xs12 sm8>
-        <v-text-field
-          name="project-key"
-          label="Project Key"
-          id="project-key"
-          :disabled="!settings.allowEditProjectKey"
-          v-model="settings.projectkey"
-        ></v-text-field>
-      </v-flex>
-    </v-layout>
-    <v-layout row v-if="settings.allowEditProjectSlug">
-      <v-flex sm4 hidden-xs-only>
-        <v-subheader>
-          Project Slug
-        </v-subheader>
-      </v-flex>
-      <v-flex xs12 sm8>
-        <v-text-field
-          name="project-slug"
-          label="Project Slug"
-          id="project-slug"
-          :disabled="!settings.allowEditProjectSlug"
-          v-model="settings.slug"
-        ></v-text-field>
-      </v-flex>
-    </v-layout>
-    <v-layout row>
-      <v-flex xs12 sm4 hidden-xs-only>
-        <v-subheader>
-          Display Name
-        </v-subheader>
-      </v-flex>
-      <v-flex xs12 sm8>
-        <v-text-field
-          name="display-name"
-          label="Display Name"
-          id="display-name"
-          v-model="settings.name"
-        ></v-text-field>
-      </v-flex>
-    </v-layout>
-    <v-layout row>
-      <v-flex xs12 sm4 hidden-xs-only>
-        <v-subheader>
-          Project URL
-        </v-subheader>
-      </v-flex>
-      <v-flex xs12 sm8>
-        <v-text-field
-          name="project-url"
-          label="Project URL"
-          id="project-url"
-          v-model="settings.url"
-        ></v-text-field>
+      <v-flex xs12 lg6>
+        <h3>Forecast Settings</h3>
+        <v-layout row>
+          <v-flex xs12>
+            <v-subheader>Types</v-subheader>
+            <v-layout row wrap>
+              <v-flex xs6 sm4>
+                <v-checkbox label="Usage: CPU" v-model="settings.forecast.types" value="cpu" dark></v-checkbox>
+              </v-flex>
+              <v-flex xs6 sm4>
+                <v-checkbox label="Usage: RAM" v-model="settings.forecast.types" value="ram" dark></v-checkbox>
+              </v-flex>
+              <v-flex xs6 sm4>
+                <v-checkbox label="Usage: HDD" v-model="settings.forecast.types" value="hdd" dark></v-checkbox>
+              </v-flex>
+              <v-flex xs6 sm4>
+                <v-checkbox label="Network: RX" v-model="settings.forecast.types" value="rx" dark></v-checkbox>
+              </v-flex>
+              <v-flex xs6 sm4>
+                <v-checkbox label="Network: TX" v-model="settings.forecast.types" value="tx" dark></v-checkbox>
+              </v-flex>
+              <v-flex xs6 sm4>
+                <v-checkbox label="Latency" v-model="settings.forecast.types" value="latency" dark></v-checkbox>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+        <v-layout row>
+
+        </v-layout>
       </v-flex>
     </v-layout>
     <v-layout row>
@@ -112,7 +148,15 @@ export default {
         projectkey: "",
         name: "",
         slug: "",
-        url: ""
+        url: "",
+        forecast: {
+          values: 5000,
+          method: 0,
+          points: 12,
+          sensitivity: 10,
+          refresh: 60,
+          types: ['cpu']
+        }
       }
     }
   },
