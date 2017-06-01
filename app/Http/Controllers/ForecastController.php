@@ -118,7 +118,7 @@ class ForecastController extends Controller {
     $total = 0;
     foreach ( $items as $item ) {
         $count++;
-        $total += $item->type;
+        $total += $item->$type;
         if ($count == 10) {
           fputcsv( $file, array(number_format($total / 10, 2) ) );
           $total = 0;
