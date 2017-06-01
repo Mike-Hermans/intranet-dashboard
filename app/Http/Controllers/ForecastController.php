@@ -107,7 +107,7 @@ class ForecastController extends Controller {
     $items = \DB::table($this->project['id'] . '_usage')
     ->select('timestamp', $type)
     ->latest('timestamp')
-    ->limit(5000)
+    ->limit(2000)
     ->get()
     ->toArray();
     $this->last_point = $items[0]->timestamp;
@@ -115,10 +115,14 @@ class ForecastController extends Controller {
     $file = fopen('r/' . $this->csv_file, 'a+' );
     fputcsv( $file, array($type) );
     $count = 0;
+    $total = 0;
     foreach ( $items as $item ) {
         $count++;
-        if ($count % 10 == 0) {
-          fputcsv( $file, array($item->$type) );
+        $total += $item->type;
+        if ($count == 10) {
+          fputcsv( $file, array(number_format($total / 10, 2) ) );
+          $total = 0;
+          $count = 0;
         }
     }
     fclose( $file );
@@ -146,7 +150,7 @@ class ForecastController extends Controller {
     $count = \DB::table($this->project['id'] . '_usage')
     ->select('timestamp', $this->type)->count();
 
-    if ($count < 5000) {
+    if ($count < 2000) {
       $this->message = 'not_enough_values_' . $count;
       return false;
     }
