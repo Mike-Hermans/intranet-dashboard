@@ -43,6 +43,7 @@ Route::get('/api/project/{slug}/forecast/{type}', 'ForecastController@get_foreca
 
 // Return CSV
 Route::get('/csv/{slug}', 'CSVController@usage');
+Route::get('/csvml', 'CSVController@prepare_ml');
 
 // Start the forecast for a given project
 Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast')

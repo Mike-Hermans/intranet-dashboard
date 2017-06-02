@@ -97,4 +97,40 @@ class CSVController extends Controller {
 
     return $query;
   }
+
+  public function prepare_ml() {
+    $projects = \App\Project::all()->toArray();
+
+    $columns = array('hdd', 'ram', 'page', 'cpu');
+    $response = new StreamedResponse( function() use ($projects, $columns){
+        // Open output stream
+      $file = fopen('php://output', 'w');
+      fputcsv($file, $columns);
+
+      foreach ($projects as $project) {
+        $items = \DB::table($project['id'] . '_usage')
+        ->select('hdd', 'ram', 'page', 'cpu')
+        ->whereNotNull('hdd')
+        ->whereNotNull('ram')
+        ->whereNotNull('page')
+        ->whereNotNull('cpu')
+        ->get()
+        ->toArray();
+
+        foreach($items as $item) {
+           fputcsv($file, array(
+             $item->hdd,
+             $item->ram,
+             $item->page,
+             $item->cpu
+           ));
+        }
+      }
+      fclose($file);
+    }, 200, [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => 'attachment;filename=all-usage.csv;',
+    ]);
+    return $response;
+  }
 }
