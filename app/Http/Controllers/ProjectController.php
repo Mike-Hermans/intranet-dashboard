@@ -47,7 +47,7 @@ class ProjectController extends Controller {
     }
 
     $this->project->url = $this->settings->url;
-    $this->project->name = $this->settings->displayname;
+    $this->project->name = $this->settings->name;
     $this->project->save();
     return 200;
   }

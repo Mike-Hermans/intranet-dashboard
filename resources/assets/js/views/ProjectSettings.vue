@@ -142,6 +142,7 @@ export default {
       project: null,
       projecturl: '/project/' + this.$route.params.project + '/',
       apiurl: '/api/project/' + this.$route.params.project + '/settings',
+      saveButtonShowLoading: false,
       settings: {
         allowEditProjectKey: false,
         allowEditProjectSlug: false,
