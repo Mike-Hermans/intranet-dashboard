@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar fixed>
+    <v-toolbar fixed light>
       <v-toolbar-side-icon light @click.native.stop="$parent.nav = !$parent.nav" />
       <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-toolbar-items>

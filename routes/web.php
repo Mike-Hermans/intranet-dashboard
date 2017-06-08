@@ -51,6 +51,7 @@ Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast')
 
 Route::post('/api/project/{slug}/update', 'ProjectController@update');
 Route::post('/api/add', 'ProjectController@add');
+Route::post('/api/slug', 'ProjectController@create_slug');
 
 // External connections
 Route::post('/api/collect', 'FetchDataController@collect');

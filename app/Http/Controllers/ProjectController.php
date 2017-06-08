@@ -53,20 +53,24 @@ class ProjectController extends Controller {
   }
 
   public function add(Request $request) {
-    $name = $request->input('name', '');
-    if ( ! empty('name') ) {
-      if ( $this->create_new_project( $request->input('name') ) ) {
-        return str_slug( $request->input('name') );
-      }
+    $project = json_decode($request->getContent());
+    if ( $this->create_new_project( $project ) ) {
+      return str_slug( $request->input('name') );
     }
     return 'error';
   }
 
-  private function create_new_project( $projectname ) {
+  public function create_slug(Request $request) {
+    $project = json_decode($request->getContent());
+    return str_slug($project->name, '-');
+  }
+
+  private function create_new_project( $newproject ) {
     $project = new \App\Project;
-    $project->name = $projectname;
-    $project->slug = str_slug($projectname, '-');
-    $project->key = '';
+    $project->name = $newproject->name;
+    $project->slug = str_slug($newproject->name, '-');
+    $project->key = $newproject->key;
+    $project->url = $newproject->url;
     $project->timestamps = false;
     $project->save();
 

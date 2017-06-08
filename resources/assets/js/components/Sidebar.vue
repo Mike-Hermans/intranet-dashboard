@@ -17,33 +17,12 @@
                 </v-list-tile-action>
               </v-list-tile>
             </v-list-item>
-
-            <!-- group items -->
-            <v-list-item v-for="(subItem,i) in item.items" :key="i">
-              <template v-if="subItem.form">
-                <v-list-item>
-                  <form @submit.prevent="addProject()">
-                    <v-list-tile class="containsinput">
-                      <v-text-field
-                      light
-                      v-model="newProjectName"
-                      name="name"
-                      label="Project name"
-                      ></v-text-field>
-                    </v-list-tile>
-                  </form>
-                </v-list-item>
-              </template>
-              <v-list-tile v-else ripple>
-                <v-list-tile-title v-text="subItem.title" />
-              </v-list-tile>
-            </v-list-item>
           </v-list-group>
         </template>
 
         <!-- single header -->
         <template v-else-if="item.header">
-          <v-subheader v-text="item.header" />
+          <v-subheader v-text="item.header" light />
         </template>
 
         <!-- divider -->
@@ -75,14 +54,7 @@ export default {
       defaultItemGroup: [
         { header: 'General' },
         { title: 'Home', href: '/', icon: 'home' },
-        {
-          title: 'Add Project',
-          group: '/company',
-          icon: 'library_add',
-          items: [
-            { form: true }
-          ]
-        },
+        { title: 'Add Project', href:'/add-project', icon: 'library_add' },
         { divider: true },
         { header: 'Projects' }
       ],
