@@ -9,13 +9,13 @@
               <v-layout row wrap>
                 <v-flex xs12 sm6>
                   <v-checkbox
-                    label="Allow overwrite Project Key"
+                    label="Overwrite Project Key"
                     v-model="settings.allowEditProjectKey"
                   ></v-checkbox>
                 </v-flex>
                 <v-flex xs12 sm6>
                   <v-checkbox
-                    label="Allow overwrite Project Slug"
+                    label="Overwrite Project Slug"
                     v-model="settings.allowEditProjectSlug"
                   ></v-checkbox>
                 </v-flex>
@@ -23,7 +23,7 @@
             </v-card-text>
           </v-flex>
         </v-layout>
-        <v-layout row v-if="settings.allowEditProjectKey">
+        <v-layout row>
           <v-flex sm4 hidden-xs-only>
             <v-subheader>
               Project Key
@@ -39,7 +39,7 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-        <v-layout row v-if="settings.allowEditProjectSlug">
+        <v-layout row>
           <v-flex sm4 hidden-xs-only>
             <v-subheader>
               Project Slug
@@ -131,6 +131,14 @@
         Save Settings
       </v-btn>
     </v-layout>
+    <v-snackbar
+        :timeout="3000"
+        top right
+        v-model="toast.show"
+      >
+        {{ toast.text }}
+        <v-btn flat class="pink--text" @click.native="toast.show = false">Close</v-btn>
+      </v-snackbar>
   </div>
 </template>
 
@@ -158,6 +166,10 @@ export default {
           refresh: 60,
           types: ['cpu']
         }
+      },
+      toast: {
+        show: false,
+        text: ''
       }
     }
   },
@@ -192,10 +204,18 @@ export default {
         this.saveButtonShowLoading = false
         if (data == 200) {
           EventBus.$emit('refresh-sidebar')
-          this.$router.push('/project/' + this.settings.slug)
+          this.triggerToast('Settings have been saved.')
+          if (this.settings.allowEditProjectSlug) {
+            this.$router.push('/settings/' + this.settings.slug)
+          }
+          this.getProject()
         }
       })
       .catch(error => console.log(error))
+    },
+    triggerToast(text) {
+      this.toast.text = text
+      this.toast.show = true
     }
   },
   mounted() {
