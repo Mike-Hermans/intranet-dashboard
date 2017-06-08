@@ -86,7 +86,7 @@
           </v-flex>
         </v-layout>
       </v-flex>
-      <v-flex xs12 lg6>
+      <!-- <v-flex xs12 lg6>
         <h3>Forecast Settings</h3>
         <v-layout row>
           <v-flex xs12>
@@ -111,18 +111,13 @@
                 <v-checkbox label="Latency" v-model="settings.forecast.types" value="latency" dark></v-checkbox>
               </v-flex>
             </v-layout>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-
+          </v-flex> -->
         </v-layout>
       </v-flex>
     </v-layout>
     <v-layout row>
       <v-btn
-        xs12
         light
-        secondary
         :loading="saveButtonShowLoading"
         @click.native="saveSettings()"
         :disabled="saveButtonShowLoading"
@@ -130,15 +125,42 @@
       >
         Save Settings
       </v-btn>
+      <v-dialog v-model="removeProjectDialog">
+        <v-btn light class="red darken-1" slot="activator">Delete project</v-btn>
+        <v-card>
+          <v-card-row>
+            <v-card-title>Delete project?</v-card-title>
+          </v-card-row>
+          <v-card-row>
+              <v-card-text>
+                This will remove all data belonging to this project and can not be undone.
+                To verify deletion, enter the project slug below <br>
+                (<code>{{project.slug}}</code>)
+                <v-flex xs12>
+                  <v-text-field
+                    name="remove-project-field"
+                    label="Project Slug"
+                    id="remove-project-field"
+                    v-model="removeProjectField"
+                  ></v-text-field>
+                </v-flex>
+              </v-card-text>
+          </v-card-row>
+          <v-card-row actions>
+            <v-btn class="blue--text darken-1" flat="flat" @click.native="removeProjectDialog = false">Cancel</v-btn>
+            <v-btn class="red--text darken-1" flat="flat" @click.native="removeProject()">Delete</v-btn>
+          </v-card-row>
+        </v-card>
+      </v-dialog>
     </v-layout>
     <v-snackbar
         :timeout="3000"
         top right
         v-model="toast.show"
       >
-        {{ toast.text }}
-        <v-btn flat class="pink--text" @click.native="toast.show = false">Close</v-btn>
-      </v-snackbar>
+      {{ toast.text }}
+      <v-btn flat class="pink--text" @click.native="toast.show = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -147,7 +169,9 @@ import { EventBus } from '../EventBus'
 export default {
   data () {
     return {
-      project: null,
+      project: {
+        slug: ''
+      },
       projecturl: '/project/' + this.$route.params.project + '/',
       apiurl: '/api/project/' + this.$route.params.project + '/settings',
       saveButtonShowLoading: false,
@@ -170,7 +194,9 @@ export default {
       toast: {
         show: false,
         text: ''
-      }
+      },
+      removeProjectDialog: false,
+      removeProjectField: ''
     }
   },
   methods: {
@@ -216,6 +242,22 @@ export default {
     triggerToast(text) {
       this.toast.text = text
       this.toast.show = true
+    },
+    removeProject() {
+      if (this.project.slug != this.removeProjectField) {
+        this.triggerToast('Project slug is incorrect')
+      } else {
+        this.removeProjectDialog = false
+        axios.post('api/project/remove', this.project)
+        .then(({data}) => {
+          if (data == 200) {
+            EventBus.$emit('refresh-sidebar')
+            this.$router.push('/')
+          } else {
+            this.triggerToast('An error occured when removing the project.')
+          }
+        })
+      }
     }
   },
   mounted() {

@@ -14,13 +14,13 @@
     },
     mounted() {
       EventBus.$emit('toolbar-settings', {
-        title: 'Home',
-        icons: [
-          {
-            icon: 'settings',
-            url: '/#/settings/'
-          }
-        ]
+        title: 'Home'
+        // icons: [
+        //   {
+        //     icon: 'settings',
+        //     url: '/#/settings/'
+        //   }
+        // ]
       })
     }
   }

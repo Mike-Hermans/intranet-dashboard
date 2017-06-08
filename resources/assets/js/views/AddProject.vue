@@ -99,14 +99,15 @@
         <li>Edit your cron jobs: <kbd>crontab -e</kbd> and past the previous result</li>
         <li>Save the crontab</li>
       </ol>
+      <v-btn primary @click.native="gotoProject()" light>Go to project</v-btn>
     </v-stepper-content>
     <v-snackbar
         :timeout="3000"
         top right
-        v-model="snackbar.show"
+        v-model="toast.show"
       >
-        {{ snackbar.text }}
-        <v-btn flat class="pink--text" @click.native="snackbar.show = false">Close</v-btn>
+        {{ toast.text }}
+        <v-btn flat class="pink--text" @click.native="toast.show = false">Close</v-btn>
       </v-snackbar>
   </v-stepper>
 </template>
@@ -124,7 +125,7 @@
           url: '',
           key: ''
         },
-        snackbar: {
+        toast: {
           show: false,
           text: ''
         }
@@ -155,8 +156,11 @@
         })
       },
       triggerToast(text) {
-        this.snackbar.text = text
-        this.snackbar.show = true
+        this.toast.text = text
+        this.toast.show = true
+      },
+      gotoProject() {
+        this.$router.push('/project/' + this.project.slug)
       }
     },
     mounted() {

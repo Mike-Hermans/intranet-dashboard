@@ -65,6 +65,18 @@ class ProjectController extends Controller {
     return str_slug($project->name, '-');
   }
 
+  public function remove_project(Request $request) {
+    $project = json_decode($request->getContent());
+    $this->verify_project($project->slug);
+
+    \Schema::dropIfExists($this->project->id . "_usage");
+    \Schema::dropIfExists($this->project->id . "_db");
+    \Schema::dropIfExists($this->project->id . "_plugins");
+    $this->project->delete();
+
+    return 200;
+  }
+
   private function create_new_project( $newproject ) {
     $project = new \App\Project;
     $project->name = $newproject->name;
