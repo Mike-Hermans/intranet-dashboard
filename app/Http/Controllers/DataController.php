@@ -153,4 +153,17 @@ class DataController extends Controller {
     return $query;
   }
 
+  public function data_cleanup() {
+    $projects = \App\Project::all();
+
+    $tables = ['usage', 'db'];
+    foreach ($projects as $project) {
+      foreach ($tables as $table) {
+        \DB::table($project->id . '_' . $table)
+        ->where('timestamp', '<', strtotime('7 days ago'))
+        ->delete();
+      }
+    }
+    echo "All data older than a week ago has been removed.";
+  }
 }

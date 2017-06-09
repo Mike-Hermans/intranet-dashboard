@@ -45,6 +45,8 @@ Route::get('/api/project/{slug}/forecast/{type}', 'ForecastController@get_foreca
 Route::get('/csv/{slug}', 'CSVController@usage');
 Route::get('/csvml', 'CSVController@prepare_ml');
 
+Route::get('/cleanup', 'DataController@data_cleanup');
+
 // Start the forecast for a given project
 Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast')
       ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
