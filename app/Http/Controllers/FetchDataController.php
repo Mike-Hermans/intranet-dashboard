@@ -104,8 +104,8 @@ class FetchDataController extends Controller {
 
     if (isset($content['tables'])) {
       // Check if minutes equal to zero
-      if (date('s', $this->timestamp) == '00') {
-        $this->save_table_data($content['tables']);  
+      if (date('i', $this->timestamp) == '00') {
+        $this->save_table_data($content['tables']);
       }
     }
 
