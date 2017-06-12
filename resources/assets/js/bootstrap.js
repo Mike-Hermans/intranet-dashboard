@@ -6,9 +6,13 @@ import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
 import VueHighcharts from 'vue-highcharts'
 import Highcharts from 'highcharts/highstock'
-import highchartsMore from 'highcharts/highcharts-more';
+import highchartsMore from 'highcharts/highcharts-more'
+// import es6promise from 'es6-promise'
+// import babelpolyfill from 'babel-polyfill'
+//
+// es6promise.polyfill()
 
-highchartsMore(Highcharts);
+highchartsMore(Highcharts)
 window.Vue = Vue
 Vue.use(VueRouter)
 Vue.use(Vuetify)
