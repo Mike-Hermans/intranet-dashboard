@@ -12,6 +12,9 @@
             <v-flex xs12 sm6 mb-4 v-for="(graph, i) in graphData" :key="i">
               <chart :data="graph"></chart>
             </v-flex>
+            <v-flex xs12 sm6 mb-4>
+              <notepad></notepad>
+            </v-flex>
           </v-layout>
         </v-flex>
       </v-layout>
@@ -29,7 +32,8 @@ import { EventBus } from '../EventBus'
 export default {
   components: {
     'chart': require('../components/Chart'),
-    'status': require('../components/Status')
+    'status': require('../components/Status'),
+    'notepad': require('../components/Notepad')
   },
   data () {
     return {
@@ -55,27 +59,14 @@ export default {
               color: '#ff9800'
             }
           ],
-          slug: 'usage'
-        },
-        'network': {
-          title: 'Network',
-          name: 'network',
-          values: [
-            {
-              value: 'rx',
-              color: '#3f51b5'
-            },
-            {
-              value: 'tx',
-              color: '#ff9800'
-            }
-          ],
+          suffix: '%',
           slug: 'usage'
         },
         'tables': {
           title: 'Database',
           name: 'tables',
           values: [],
+          suffix: ' mb',
           slug: 'tables'
         },
         'latency': {
@@ -87,6 +78,7 @@ export default {
               color: '#2196f3'
             }
           ],
+          suffix: 's',
           slug: 'usage'
         }
       },

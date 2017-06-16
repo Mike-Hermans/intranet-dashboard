@@ -3,11 +3,11 @@
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-import './bootstrap';
-import router from './routes';
+import './bootstrap'
+import router from './routes'
 
-Vue.component('sidebar', require('./components/Sidebar'));
-Vue.component('toolbar', require('./components/Toolbar'));
+Vue.component('sidebar', require('./components/Sidebar'))
+Vue.component('toolbar', require('./components/Toolbar'))
 
 new Vue({
     el: '#app',
@@ -15,4 +15,4 @@ new Vue({
     data: {
         nav: true
     }
-});
+})

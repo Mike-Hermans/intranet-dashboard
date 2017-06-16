@@ -104,9 +104,9 @@ class FetchDataController extends Controller {
 
     if (isset($content['tables'])) {
       // Check if minutes equal to zero
-      if (date('i', $this->timestamp) == '00') {
+      //if (date('i', $this->timestamp) == '00') {
         $this->save_table_data($content['tables']);
-      }
+      //}
     }
 
     if (isset($content['plugins'])) {
@@ -150,6 +150,8 @@ class FetchDataController extends Controller {
         curl_close($ch);
         return $info['total_time'];
       }
+
+      // If connection fails, return a -1
       curl_close($ch);
       return -1;
     }

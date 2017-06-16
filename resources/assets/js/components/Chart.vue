@@ -10,6 +10,7 @@
 </template>
 
 <script>
+  import { EventBus } from '../EventBus'
   export default {
     name: 'chart',
     props: ['data'],
@@ -25,8 +26,9 @@
               showInNavigator: true,
               cursor: 'pointer',
               events: {
-                // Divide by 1000 to convert to seconds
-                //click: (e) => this.test()
+                click(e) {
+                  EventBus.$emit('chart-setdate', e)
+                }
               }
             }
           },
@@ -52,7 +54,12 @@
           },
           xAxis: {
             events: {
-              //afterSetExtremes: this.afterSetExtremes
+              afterSetExtremes(e) {
+                // Prevent trigger on chart load
+                if (e.trigger != undefined) {
+        	        EventBus.$emit('chart-setrange', e)
+				        }
+              }
             },
             minRange: 3600 * 1000
           },
@@ -60,10 +67,9 @@
             floor: 0
           },
           tooltip: {
-              pointFormat: '{series.name}: <b>{point.y:.2f}</b><br/>',
+              pointFormat: '{series.name}: <b>{point.y:.2f}</b>' + this.data.suffix + '<br/>',
               split: true,
-              shared: false,
-
+              shared: false
           },
           credits: false,
           series: []
@@ -120,6 +126,24 @@
     },
     mounted() {
       this.createChart()
+      EventBus.$on('chart-setdate', (point) => {
+        let chart = this.$refs[this.data.name].chart
+        let date = point.point.x
+
+        for (let serie of chart.series) {
+          for (let chartpoint of serie.data) {
+            if (chartpoint.x == date) {
+              chartpoint.select()
+              chartpoint.onMouseOver()
+              break;
+            }
+          }
+        }
+      })
+      EventBus.$on('chart-setrange', (range) => {
+        let chart = this.$refs[this.data.name].chart
+        chart.xAxis[0].setExtremes(range.min, range.max, true, false)
+      })
     }
   }
 </script>

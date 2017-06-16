@@ -86,7 +86,7 @@
           </v-flex>
         </v-layout>
       </v-flex>
-      <!-- <v-flex xs12 lg6>
+      <v-flex xs12 lg6>
         <h3>Forecast Settings</h3>
         <v-layout row>
           <v-flex xs12>
@@ -111,7 +111,7 @@
                 <v-checkbox label="Latency" v-model="settings.forecast.types" value="latency" dark></v-checkbox>
               </v-flex>
             </v-layout>
-          </v-flex> -->
+          </v-flex>
         </v-layout>
       </v-flex>
     </v-layout>
