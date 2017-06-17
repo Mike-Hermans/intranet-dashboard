@@ -37,4 +37,8 @@ class Project extends Model
   public function events() {
     return $this->hasMany('App\Events');
   }
+
+  public function notes() {
+    return $this->hasMany('App\Note');
+  }
 }

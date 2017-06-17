@@ -29,7 +29,7 @@
         <v-card-text v-for="(event, i) in events" :key="i" height="60px">
           <div>
             <div>{{ event.event }}</div>
-            <strong>{{ event.timestamp * 1000 | moment("from")}}</strong>
+            <strong>{{ event.timestamp * 1000 | moment("from", $parent.time)}}</strong>
           </div>
         </v-card-text>
       </v-tabs-content>

@@ -27,7 +27,8 @@
               cursor: 'pointer',
               events: {
                 click(e) {
-                  EventBus.$emit('chart-setdate', e)
+                  // When a point gets clicked, emit its timestamp
+                  EventBus.$emit('chart-setdate', e.point.x)
                 }
               }
             }
@@ -88,9 +89,10 @@
           }))
           .catch(error => console.log(error))
 
-          if (value.value == 'cpu') {
-            axios.get('/api/project/' + this.$route.params.project + '/forecast/' + value.value)
-            .then(({data}) => {
+          // Check for forecast values
+          axios.get('/api/project/' + this.$route.params.project + '/forecast/' + value.value)
+          .then(({data}) => {
+            if (data !== 'no_forecast') {
               let serie = []
               let eighty = []
               for (let [key, fpoint] of Object.entries(data)) {
@@ -119,20 +121,19 @@
                 fillOpacity: 0.2,
                 zIndex: 0
               })
-            })
-          }
+            }
+          })
         }
       }
     },
     mounted() {
       this.createChart()
-      EventBus.$on('chart-setdate', (point) => {
+      EventBus.$on('chart-setdate', (timestamp) => {
         let chart = this.$refs[this.data.name].chart
-        let date = point.point.x
-
+        // For each series, highlight the correct point
         for (let serie of chart.series) {
           for (let chartpoint of serie.data) {
-            if (chartpoint.x == date) {
+            if (chartpoint && chartpoint.x == timestamp) {
               chartpoint.select()
               chartpoint.onMouseOver()
               break;

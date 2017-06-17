@@ -25,6 +25,7 @@ class ProjectController extends Controller {
   public function get_project( $slug ) {
     $this->verify_project($slug);
     if ($this->project) {
+      // Format the project key so it's not completely visible
       $this->project['projectkey'] = $this->project->getKey();
       return $this->project->toArray();
     }

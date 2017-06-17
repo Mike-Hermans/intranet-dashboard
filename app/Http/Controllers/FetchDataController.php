@@ -12,7 +12,13 @@ class FetchDataController extends Controller {
     if ( ! $this->verify_header($request->header('Authorization') ) ) {
       return 'error';
     }
+    // Set a single timestamp for all data currently being saved
     $this->timestamp = date(date_timestamp_get(date_create()));
+
+    // Update the last_updated column
+    $this->project->last_updated = $this->timestamp;
+    $this->project->save();
+
     $this->save_data(json_decode($request->getContent(), true));
     return 'success';
   }
@@ -104,9 +110,9 @@ class FetchDataController extends Controller {
 
     if (isset($content['tables'])) {
       // Check if minutes equal to zero
-      //if (date('i', $this->timestamp) == '00') {
+      if (date('i', $this->timestamp) == '00') {
         $this->save_table_data($content['tables']);
-      //}
+      }
     }
 
     if (isset($content['plugins'])) {

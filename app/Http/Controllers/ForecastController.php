@@ -22,8 +22,11 @@ class ForecastController extends Controller {
     ->where('project_id', '=', $this->project['id'])
     ->where('type', '=', $type)
     ->first();
-
-    echo $forecast['forecast'];
+    if (!empty($forecast)) {
+      echo $forecast['forecast'];
+    } else {
+      echo "no_forecast";
+    }
   }
 
   public function forecast($slug, $type) {

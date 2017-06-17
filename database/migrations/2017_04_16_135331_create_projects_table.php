@@ -19,6 +19,7 @@ class CreateProjectsTable extends Migration
             $table->text('slug');
             $table->text('url');
             $table->text('key');
+            $table->integer('last_updated');
         });
     }
 

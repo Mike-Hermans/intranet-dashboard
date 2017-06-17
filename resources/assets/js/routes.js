@@ -20,14 +20,6 @@ let routes = [
     {
       path: '/add-project',
       component: require('./views/AddProject')
-    },
-    {
-      path: '/test/home-1',
-      component: require('./test/Home1')
-    },
-    {
-      path: '/test/home-2',
-      component: require('./test/Home2')
     }
 ]
 

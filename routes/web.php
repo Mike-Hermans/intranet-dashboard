@@ -36,10 +36,10 @@ Route::get('/api/project/{slug}/status/{date?}', 'DataController@status');
 
 // Get the most recent events for a project
 Route::get('/api/project/{slug}/events', 'DataController@events');
+Route::get('/api/project/{slug}/notes', 'DataController@get_notes');
 
 // Get the forecast for a type
-Route::get('/api/project/{slug}/forecast/{type}', 'ForecastController@get_forecast')
-      ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
+Route::get('/api/project/{slug}/forecast/{type}', 'ForecastController@get_forecast');
 
 // Return CSV
 Route::get('/csv/{slug}', 'CSVController@usage');
@@ -51,6 +51,7 @@ Route::get('/cleanup', 'DataController@data_cleanup');
 Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast')
       ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
+Route::post('/api/project/{slug}/notes', 'DataController@save_notes');
 Route::post('/api/project/{slug}/update', 'ProjectController@update');
 Route::post('/api/add', 'ProjectController@add');
 Route::post('/api/slug', 'ProjectController@create_slug');

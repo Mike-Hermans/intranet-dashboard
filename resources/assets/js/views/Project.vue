@@ -3,21 +3,22 @@
     <v-alert error v-bind:value="!project.projectkey" class="mt-0 elevation-1">
       There is no key set for this project, there will be no data collected.
     </v-alert>
-      <v-layout row wrap>
-        <v-flex xs12 lg3 mb-4 order-lg2>
-          <status></status>
-        </v-flex>
-        <v-flex xs12 lg9 order-lg1>
-          <v-layout row wrap v-if="renderCharts">
-            <v-flex xs12 sm6 mb-4 v-for="(graph, i) in graphData" :key="i">
-              <chart :data="graph"></chart>
-            </v-flex>
-            <v-flex xs12 sm6 mb-4>
-              <notepad></notepad>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-      </v-layout>
+    <v-layout row wrap>
+      <v-flex xs12 lg3 mb-4 order-lg2>
+        <timecard mb-4 :time="time"></timecard>
+        <status></status>
+      </v-flex>
+      <v-flex xs12 lg9 order-lg1>
+        <v-layout row wrap v-if="renderCharts">
+          <v-flex xs12 sm6 mb-4 v-for="(graph, i) in graphData" :key="i">
+            <chart :data="graph"></chart>
+          </v-flex>
+          <v-flex xs12 sm6 mb-4>
+            <notepad></notepad>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
   </div>
   <div v-else class="loading-div">
     <v-progress-circular
@@ -33,7 +34,8 @@ export default {
   components: {
     'chart': require('../components/Chart'),
     'status': require('../components/Status'),
-    'notepad': require('../components/Notepad')
+    'notepad': require('../components/Notepad'),
+    'timecard': require('../components/TimeCard')
   },
   data () {
     return {
@@ -41,6 +43,7 @@ export default {
       baseslug: '/project/' + this.$route.params.project + '/',
       apiurl: '/api/project/' + this.$route.params.project + '/',
       renderCharts: false,
+      time: 'now',
       graphData: {
         'hddram': {
           title: 'Usage',
@@ -86,6 +89,7 @@ export default {
   },
   mounted () {
     this.fetchProject()
+    EventBus.$on('chart-setdate', (timestamp) => this.time = timestamp)
   },
   watch: {
     '$route' (to, from) {
@@ -102,6 +106,7 @@ export default {
       axios.get('/api/project/' + this.$route.params.project)
       .then(({data}) => {
         this.project = data
+        this.time = data.last_updated * 1000
         // Change the toolbar title
         EventBus.$emit('toolbar-settings', {
           title: this.project.name,

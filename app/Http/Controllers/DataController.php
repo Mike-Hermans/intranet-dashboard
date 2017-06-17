@@ -166,4 +166,25 @@ class DataController extends Controller {
     }
     echo "All data older than a week ago has been removed.";
   }
+
+  public function get_notes($slug) {
+    $this->verify_project($slug);
+    echo json_encode(
+      $this->project->notes()
+      ->get(['timestamp', 'note'])
+      ->toArray()
+    );
+  }
+
+  public function save_notes(Request $request, $slug) {
+    $this->verify_project($slug);
+    $note = new \App\Note;
+
+    $content = json_decode($request->getContent(), true);
+
+    $note->note = $content['note'];
+    $note->timestamp = isset($content['timestamp']) ? $content['timestamp'] / 1000 : 0;
+    $this->project->notes()->save($note);
+    echo "200";
+  }
 }
