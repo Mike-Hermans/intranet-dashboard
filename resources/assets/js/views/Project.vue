@@ -5,7 +5,7 @@
     </v-alert>
     <v-layout row wrap>
       <v-flex xs12 lg3 mb-4 order-lg2>
-        <timecard mb-4 :time="time"></timecard>
+        <!-- <timecard mb-4 :time="time"></timecard> -->
         <status></status>
       </v-flex>
       <v-flex xs12 lg9 order-lg1>
