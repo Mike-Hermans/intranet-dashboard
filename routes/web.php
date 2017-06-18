@@ -18,14 +18,13 @@ Route::get('/', function () {
 /*
   Internal API
 */
-Route::get('/api/projects', 'ProjectController@get_projects');
-
-Route::get('/api/project/{slug}', 'ProjectController@get_project');
+Route::get('/api/projects', 'ProjectController@getProjects');
+Route::get('/api/project/{slug}', 'ProjectController@getProject');
 
 Route::get('/api/project/{slug}/usage/{type?}', 'DataController@usage')
       ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
-Route::get('/api/project/{slug}/lastusage', 'DataController@last_usage');
+Route::get('/api/project/{slug}/lastusage', 'DataController@lastUsage');
 
 // Get all plugins
 Route::get('/api/project/{slug}/plugins', 'DataController@plugins');
@@ -40,26 +39,27 @@ Route::get('/api/project/{slug}/status/{date?}', 'DataController@status');
 Route::get('/api/project/{slug}/events', 'DataController@events');
 
 // Get Notes
-Route::get('/api/project/{slug}/notes', 'DataController@get_notes');
+Route::get('/api/project/{slug}/notes', 'DataController@getNotes');
 
 // Get the forecast for a type
-Route::get('/api/project/{slug}/forecast/{type}', 'ForecastController@get_forecast');
+Route::get('/api/project/{slug}/forecast/{type}', 'ForecastController@getForecast');
 
 // Return CSV
 Route::get('/csv/{slug}', 'CSVController@usage');
-Route::get('/csvml', 'CSVController@prepare_ml');
+// Return a bigger set
+Route::get('/csvml', 'CSVController@prepareMl');
 
-Route::get('/cleanup', 'DataController@data_cleanup');
+Route::get('/cleanup', 'DataController@dataCleanup');
 
 // Start the forecast for a given project
 Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast')
       ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
-Route::post('/api/project/{slug}/notes', 'DataController@save_notes');
-Route::post('/api/project/{slug}/update', 'ProjectController@update');
-Route::post('/api/add', 'ProjectController@add');
-Route::post('/api/slug', 'ProjectController@create_slug');
-Route::post('/api/project/remove', 'ProjectController@remove_project');
+Route::post('/api/project/{slug}/notes', 'FetchDataController@saveNotes');
+Route::post('/api/project/{slug}/update', 'ProjectController@updateProject');
+Route::post('/api/add', 'ProjectController@addProject');
+Route::post('/api/slug', 'ProjectController@createSlug');
+Route::post('/api/project/remove', 'ProjectController@removeProject');
 
 // External connections
 Route::post('/api/collect', 'FetchDataController@collect');

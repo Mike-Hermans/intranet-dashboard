@@ -7,10 +7,6 @@ import Vuetify from 'vuetify'
 import VueHighcharts from 'vue-highcharts'
 import Highcharts from 'highcharts/highstock'
 import highchartsMore from 'highcharts/highcharts-more'
-import es6promise from 'es6-promise'
-import babelpolyfill from 'babel-polyfill'
-
-es6promise.polyfill()
 
 highchartsMore(Highcharts)
 window.Vue = Vue

@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
-    public function project() {
-      return $this->belongsTo('App\Project');
+    public function project()
+    {
+        return $this->belongsTo('App\Project');
     }
 }
