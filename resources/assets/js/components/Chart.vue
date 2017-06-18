@@ -90,39 +90,39 @@
           .catch(error => console.log(error))
 
           // Check for forecast values
-          axios.get('/api/project/' + this.$route.params.project + '/forecast/' + value.value)
-          .then(({data}) => {
-            if (data !== 'no_forecast') {
-              let serie = []
-              let eighty = []
-              for (let [key, fpoint] of Object.entries(data)) {
-                serie.push([fpoint.point * 1000, fpoint.forecast])
-                eighty.push([fpoint.point * 1000, fpoint.lo95, fpoint.hi95])
-              }
-              this.$refs[this.data.name].chart.addSeries({
-                id: value.value + '_forecast',
-                name: value.value + '_forecast',
-                color: '000000',
-                data: serie,
-                zIndex: 1,
-                marker: {
-                    enabled: true,
-                    fillColor: 'white',
-                    lineWidth: 2
-                }
-              })
-              this.$refs[this.data.name].chart.addSeries({
-                name: '95% Range',
-                data: eighty,
-                type: 'arearange',
-                color: value.color,
-                lineWidth: 0,
-                linkedTo: value.value + '_forecast',
-                fillOpacity: 0.2,
-                zIndex: 0
-              })
-            }
-          })
+          // axios.get('/api/project/' + this.$route.params.project + '/forecast/' + value.value)
+          // .then(({data}) => {
+          //   if (data !== 'no_forecast') {
+          //     let serie = []
+          //     let eighty = []
+          //     for (let [key, fpoint] of Object.entries(data)) {
+          //       serie.push([fpoint.point * 1000, fpoint.forecast])
+          //       eighty.push([fpoint.point * 1000, fpoint.lo95, fpoint.hi95])
+          //     }
+          //     this.$refs[this.data.name].chart.addSeries({
+          //       id: value.value + '_forecast',
+          //       name: value.value + '_forecast',
+          //       color: '000000',
+          //       data: serie,
+          //       zIndex: 1,
+          //       marker: {
+          //           enabled: true,
+          //           fillColor: 'white',
+          //           lineWidth: 2
+          //       }
+          //     })
+          //     this.$refs[this.data.name].chart.addSeries({
+          //       name: '95% Range',
+          //       data: eighty,
+          //       type: 'arearange',
+          //       color: value.color,
+          //       lineWidth: 0,
+          //       linkedTo: value.value + '_forecast',
+          //       fillOpacity: 0.2,
+          //       zIndex: 0
+          //     })
+          //   }
+          // })
         }
       }
     },

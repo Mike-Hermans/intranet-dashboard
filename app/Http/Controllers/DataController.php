@@ -50,7 +50,8 @@ class DataController extends Controller
     {
         $this->verifyProject($slug);
         $this->table = $this->project->id . '_db';
-        if ($table != '') {
+
+        if ($table == '') {
             return $this->listTables();
         }
 
