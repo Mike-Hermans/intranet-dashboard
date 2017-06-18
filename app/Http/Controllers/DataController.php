@@ -187,4 +187,13 @@ class DataController extends Controller {
     $this->project->notes()->save($note);
     echo "200";
   }
+
+  public function last_usage($slug) {
+    $this->verify_project($slug);
+
+    $lastusage = \DB::table($this->project->id . '_usage')
+                  ->orderBy('timestamp', 'latest')
+                  ->first();
+    echo json_encode($lastusage);
+  }
 }

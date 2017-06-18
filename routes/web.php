@@ -25,6 +25,8 @@ Route::get('/api/project/{slug}', 'ProjectController@get_project');
 Route::get('/api/project/{slug}/usage/{type?}', 'DataController@usage')
       ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
+Route::get('/api/project/{slug}/lastusage', 'DataController@last_usage');
+
 // Get all plugins
 Route::get('/api/project/{slug}/plugins', 'DataController@plugins');
 
@@ -36,6 +38,8 @@ Route::get('/api/project/{slug}/status/{date?}', 'DataController@status');
 
 // Get the most recent events for a project
 Route::get('/api/project/{slug}/events', 'DataController@events');
+
+// Get Notes
 Route::get('/api/project/{slug}/notes', 'DataController@get_notes');
 
 // Get the forecast for a type
