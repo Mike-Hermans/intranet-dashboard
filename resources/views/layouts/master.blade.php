@@ -16,10 +16,12 @@
         <sidebar></sidebar>
         <toolbar></toolbar>
         <main>
+          <alert></alert>
           <v-container fluid>
             <router-view></router-view>
           </v-container>
         </main>
+        <notification></notification>
       </v-app>
       <script src="/js/app.js"></script>
     </body>

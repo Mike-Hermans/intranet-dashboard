@@ -153,14 +153,6 @@
         </v-card>
       </v-dialog>
     </v-layout>
-    <v-snackbar
-        :timeout="3000"
-        top right
-        v-model="toast.show"
-      >
-      {{ toast.text }}
-      <v-btn flat class="pink--text" @click.native="toast.show = false">Close</v-btn>
-    </v-snackbar>
   </div>
 </template>
 
@@ -190,10 +182,6 @@ export default {
           refresh: 60,
           types: ['cpu']
         }
-      },
-      toast: {
-        show: false,
-        text: ''
       },
       removeProjectDialog: false,
       removeProjectField: ''
@@ -230,7 +218,7 @@ export default {
         this.saveButtonShowLoading = false
         if (data == 200) {
           EventBus.$emit('refresh-sidebar')
-          this.triggerToast('Settings have been saved.')
+          EventBus.$emit('notify', 'Settings have been saved.')
           if (this.settings.allowEditProjectSlug) {
             this.$router.push('/settings/' + this.settings.slug)
           }
@@ -239,13 +227,9 @@ export default {
       })
       .catch(error => console.log(error))
     },
-    triggerToast(text) {
-      this.toast.text = text
-      this.toast.show = true
-    },
     removeProject() {
       if (this.project.slug != this.removeProjectField) {
-        this.triggerToast('Project slug is incorrect')
+        EventBus.$emit('notify', 'Project slug is incorrect')
       } else {
         this.removeProjectDialog = false
         axios.post('api/project/remove', this.project)
@@ -254,7 +238,7 @@ export default {
             EventBus.$emit('refresh-sidebar')
             this.$router.push('/')
           } else {
-            this.triggerToast('An error occured when removing the project.')
+            EventBus.$emit('notify', 'An error occured when removing the project.')
           }
         })
       }

@@ -101,14 +101,6 @@
       </ol>
       <v-btn primary @click.native="gotoProject()" light>Go to project</v-btn>
     </v-stepper-content>
-    <v-snackbar
-        :timeout="3000"
-        top right
-        v-model="toast.show"
-      >
-        {{ toast.text }}
-        <v-btn flat class="pink--text" @click.native="toast.show = false">Close</v-btn>
-      </v-snackbar>
   </v-stepper>
 </template>
 
@@ -124,10 +116,6 @@
           slug: '',
           url: '',
           key: ''
-        },
-        toast: {
-          show: false,
-          text: ''
         }
       }
     },
@@ -140,7 +128,7 @@
             this.stepper = 2
           })
         } else {
-          this.triggerToast("Invalid project name")
+          EventBus.$emit('notify', 'Invalid project name')
         }
       },
       webUrl() {
@@ -152,12 +140,8 @@
         .then(({data}) => {
           EventBus.$emit('refresh-sidebar')
           this.stepper = 4
-          this.triggerToast('Project has been created')
+          EventBus.$emit('notify', 'Project has been created')
         })
-      },
-      triggerToast(text) {
-        this.toast.text = text
-        this.toast.show = true
       },
       gotoProject() {
         this.$router.push('/project/' + this.project.slug)

@@ -9,6 +9,8 @@ import { EventBus } from './EventBus'
 
 Vue.component('sidebar', require('./components/Sidebar'))
 Vue.component('toolbar', require('./components/Toolbar'))
+Vue.component('notification', require('./components/Notification'))
+Vue.component('alert', require('./components/Alert'))
 
 new Vue({
     el: '#app',

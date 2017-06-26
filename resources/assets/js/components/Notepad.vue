@@ -55,14 +55,6 @@
         </v-card-text>
       </v-tabs-content>
     </v-tabs>
-    <v-snackbar
-        :timeout="3000"
-        top right
-        v-model="toast.show"
-      >
-      {{ toast.text }}
-      <v-btn flat class="pink--text" @click.native="toast.show = false">Close</v-btn>
-    </v-snackbar>
   </v-card>
 </template>
 
@@ -76,11 +68,7 @@ import { EventBus } from '../EventBus'
         timedNote: '',
         generalButtonShowLoading: false,
         timedButtonShowLoading: false,
-        apiurl: '/api/project/' + this.$route.params.project + '/notes',
-        toast: {
-          show: false,
-          text: ''
-        }
+        apiurl: '/api/project/' + this.$route.params.project + '/notes'
       }
     },
     methods: {
@@ -101,7 +89,7 @@ import { EventBus } from '../EventBus'
           if (data == 200) {
             this.timedButtonShowLoading = false
             this.generalButtonShowLoading = false
-            this.triggerToast('Note has been saved')
+            EventBus.$emit('notify', 'Note has been saved')
           }
         })
       },
@@ -128,10 +116,6 @@ import { EventBus } from '../EventBus'
         if (!foundNote) {
           this.timedNote = ''
         }
-      },
-      triggerToast(text) {
-        this.toast.text = text
-        this.toast.show = true
       }
     },
     mounted() {
@@ -144,5 +128,9 @@ import { EventBus } from '../EventBus'
 <style lang="scss" scoped>
 .card {
   height: 100% !important;
+}
+
+.tabs__items {
+  border-style: none !important;
 }
 </style>
