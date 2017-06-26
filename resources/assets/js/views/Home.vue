@@ -108,6 +108,7 @@
     },
     mounted() {
       EventBus.$emit('toolbar-settings', { title: 'Home' })
+      EventBus.$on('global-update', () => this.getProjects())
       this.getProjects()
     }
   }

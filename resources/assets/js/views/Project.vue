@@ -137,7 +137,12 @@ export default {
     },
     update() {
       axios.get(this.apiurl + 'latest')
-      .then(({data}) => EventBus.$emit('update', data))
+      .then(({data}) => {
+        if (data.timestamp > this.project.last_updated * 1000) {
+          this.project.last_updated = data.timestamp / 1000
+          EventBus.$emit('update', data)
+        }
+      })
     }
   }
 }

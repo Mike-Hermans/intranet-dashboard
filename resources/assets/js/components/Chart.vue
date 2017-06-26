@@ -144,29 +144,22 @@
       },
       chartUpdate(data) {
         let usage = data.usage
+        let chart = this.$refs[this.data.name].chart
+        
         if (this.data.name == 'tables') {
           if (data.tables == null) {
             return
           }
           usage = data.tables
         }
-        let chart = this.$refs[this.data.name].chart
-        if (chart === undefined) {
-          console.log(this.data.name)
-        }
-        let lastTimestamp = chart.series[0].data[chart.series[0].data.length -1].x
-        let currentTimestamp = data.timestamp
 
-        // Only update when data is actually newer
-        if (currentTimestamp > lastTimestamp) {
-          for (let [i, serie] of Object.entries(chart.series)) {
-            if (usage[serie.name] !== undefined) {
-              chart.series[i].addPoint([currentTimestamp, usage[serie.name]], false, true)
-            }
+        for (let [i, serie] of Object.entries(chart.series)) {
+          if (usage[serie.name] !== undefined) {
+            chart.series[i].addPoint([data.timestamp, usage[serie.name]], false, true)
           }
-          // Redraw chart after all values have been updated
-          chart.redraw()
         }
+        // Redraw chart after all values have been updated
+        chart.redraw()
       }
     },
     mounted() {
