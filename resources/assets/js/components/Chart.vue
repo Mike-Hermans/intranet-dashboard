@@ -143,11 +143,12 @@
         }
       },
       chartUpdate(data) {
-        let usage = data.usage
-        let chart = this.$refs[this.data.name].chart
-        if (chart == undefined) {
+        if ($refs[this.data.name] == undefined) {
+          console.log('Can not find ' + this.data.name + ' chart.')
           return
         }
+        let usage = data.usage
+        let chart = this.$refs[this.data.name].chart
         if (this.data.name == 'tables') {
           if (data.tables == null) {
             return
