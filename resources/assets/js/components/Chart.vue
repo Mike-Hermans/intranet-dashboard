@@ -151,6 +151,9 @@
           usage = data.tables
         }
         let chart = this.$refs[this.data.name].chart
+        if (chart === undefined) {
+          console.log(this.data.name)
+        }
         let lastTimestamp = chart.series[0].data[chart.series[0].data.length -1].x
         let currentTimestamp = data.timestamp
 

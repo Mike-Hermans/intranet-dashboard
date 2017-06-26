@@ -1,45 +1,58 @@
 <template>
   <v-card>
-    <v-card-row class="blue darken-1">
-      <v-card-title>
-        <span class="white--text">Notes</span>
-      </v-card-title>
-    </v-card-row>
-    <v-card-text style="height: 100%">
-      <h5>Project notes</h5>
-      <v-text-field
-        label="Project notes"
-        v-model="generalNote"
-        multi-line
-        single-line
-      ></v-text-field>
-      <v-btn
-        light
-        :loading="generalButtonShowLoading"
-        @click.native="saveNote('general')"
-        :disabled="generalButtonShowLoading"
-        class="blue darken-1"
-      >
-        Save note
-      </v-btn>
-      <v-divider></v-divider>
-      <h5 mt-4>Notes for current time</h5>
-      <v-text-field
-        label="Project notes"
-        v-model="timedNote"
-        multi-line
-        single-line
-      ></v-text-field>
-      <v-btn
-        light
-        :loading="timedButtonShowLoading"
-        @click.native="saveNote('timed')"
-        :disabled="timedButtonShowLoading"
-        class="blue darken-1"
-      >
-        Save note
-      </v-btn>
-    </v-card-text>
+    <v-tabs id="tabs-notes" grow icons light>
+      <v-tabs-bar slot="activators">
+        <v-tabs-slider></v-tabs-slider>
+        <v-tabs-item href="#tabs-notes-1">
+          General
+          <v-icon>description</v-icon>
+        </v-tabs-item>
+        <v-tabs-item href="#tabs-notes-2">
+          Timed
+          <v-icon>public</v-icon>
+        </v-tabs-item>
+      </v-tabs-bar>
+      <v-tabs-content :id="'tabs-notes-1'">
+        <v-card-text style="height: 100%">
+          <h5>Project notes</h5>
+          <v-text-field
+            label="Project notes"
+            v-model="generalNote"
+            multi-line
+            single-line
+          ></v-text-field>
+          <v-btn
+            light
+            :loading="generalButtonShowLoading"
+            @click.native="saveNote('general')"
+            :disabled="generalButtonShowLoading"
+            class="blue darken-1"
+          >
+            Save note
+          </v-btn>
+        </v-card-text>
+      </v-tabs-content>
+      <v-tabs-content :id="'tabs-notes-2'">
+        <v-card-text style="height: 100%">
+          <h5 mt-4>Notes for current time</h5>
+          <v-text-field
+            label="Project notes"
+            v-model="timedNote"
+            multi-line
+            single-line
+          ></v-text-field>
+          <v-btn
+            light
+            :loading="timedButtonShowLoading"
+            @click.native="saveNote('timed')"
+            :disabled="timedButtonShowLoading"
+            class="blue darken-1"
+          >
+            Save note
+          </v-btn>
+        </v-card-text>
+      </v-tabs-content>
+    </v-tabs>
     <v-snackbar
         :timeout="3000"
         top right

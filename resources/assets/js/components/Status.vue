@@ -5,7 +5,7 @@
         <v-tabs-slider></v-tabs-slider>
         <v-tabs-item href="#tabs-1">
           WordPress
-          <v-icon>public</v-icon>
+          <v-icon>description</v-icon>
         </v-tabs-item>
         <v-tabs-item href="#tabs-2">
           Server
