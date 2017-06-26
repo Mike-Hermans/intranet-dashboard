@@ -218,7 +218,7 @@ export default {
         this.saveButtonShowLoading = false
         if (data == 200) {
           EventBus.$emit('refresh-sidebar')
-          EventBus.$emit('notify', 'Settings have been saved.')
+          EventBus.$emit('global-notify', 'Settings have been saved.')
           if (this.settings.allowEditProjectSlug) {
             this.$router.push('/settings/' + this.settings.slug)
           }
@@ -229,16 +229,17 @@ export default {
     },
     removeProject() {
       if (this.project.slug != this.removeProjectField) {
-        EventBus.$emit('notify', 'Project slug is incorrect')
+        EventBus.$emit('global-notify', 'Project slug is incorrect')
       } else {
         this.removeProjectDialog = false
         axios.post('api/project/remove', this.project)
         .then(({data}) => {
           if (data == 200) {
             EventBus.$emit('refresh-sidebar')
+            EventBus.$emit('global-notify', 'Project has been removed')
             this.$router.push('/')
           } else {
-            EventBus.$emit('notify', 'An error occured when removing the project.')
+            EventBus.$emit('global-notify', 'An error occured when removing the project.')
           }
         })
       }

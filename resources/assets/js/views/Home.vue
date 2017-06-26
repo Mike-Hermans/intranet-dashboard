@@ -10,7 +10,7 @@
               </span>
             </v-card-title>
           </v-card-row>
-          <v-card-row v-if="project.data">
+          <v-card-row v-if="project.status">
             <v-card-text>
               <v-card-row height="75px">
                 <v-icon v-if="project.status.code == 0" class="mr-3 red--text">error</v-icon>
@@ -19,7 +19,7 @@
                 <v-icon v-if="project.status.code == 3" class="mr-3">help</v-icon>
                 <div>
                   <div><strong>{{ project.status.message }}</strong></div>
-                  <div>{{ project.last_updated * 1000 | moment('from') }}</div>
+                  <div v-if="project.status.code !== 3">{{ project.last_updated * 1000 | moment('from') }}</div>
                 </div>
               </v-card-row>
             </v-card-text>
@@ -72,10 +72,13 @@
       getProjects() {
         axios.get('/api/projects')
         .then(({data}) => {
-          //this.projects = data
+          if (this.projects.length == 0) {
+            this.projects = data
+          }
           for (let [index, project] of Object.entries(data)) {
             axios.get('/api/project/' + project.slug + '/lastusage')
             .then(({data}) => {
+              project.data = data
               if (data) {
                 if (data.page == -1) {
                   project.status = {
@@ -99,7 +102,6 @@
                   message: 'No data'
                 }
               }
-              project.data = data
               this.projects.splice(index, 1, project)
             })
           }

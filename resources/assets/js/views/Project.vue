@@ -104,7 +104,7 @@ export default {
       .then(({data}) => {
         this.project = data
         if (!this.project.projectkey) {
-          EventBus.$emit('alert', 'Key not set for this project, no data will be collected.')
+          EventBus.$emit('global-alert', 'Key not set for this project, no data will be collected.')
         }
         this.time = data.last_updated * 1000
         // Change the toolbar title
@@ -138,7 +138,7 @@ export default {
       .then(({data}) => {
         if (data.timestamp > this.project.last_updated * 1000) {
           this.project.last_updated = data.timestamp / 1000
-          EventBus.$emit('update', data)
+          EventBus.$emit('project-update', data)
         }
       })
     }

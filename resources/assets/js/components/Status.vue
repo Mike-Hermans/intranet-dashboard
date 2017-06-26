@@ -116,7 +116,7 @@
     },
     mounted() {
       this.getData()
-      EventBus.$on('update', (data) => this.updateData(data))
+      EventBus.$on('project-update', (data) => this.updateData(data))
     },
     watch: {
       '$route' (to, from) {

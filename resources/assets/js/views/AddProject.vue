@@ -128,7 +128,7 @@
             this.stepper = 2
           })
         } else {
-          EventBus.$emit('notify', 'Invalid project name')
+          EventBus.$emit('global-notify', 'Invalid project name')
         }
       },
       webUrl() {
@@ -140,7 +140,7 @@
         .then(({data}) => {
           EventBus.$emit('refresh-sidebar')
           this.stepper = 4
-          EventBus.$emit('notify', 'Project has been created')
+          EventBus.$emit('global-notify', 'Project has been created')
         })
       },
       gotoProject() {

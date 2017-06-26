@@ -144,7 +144,6 @@
       },
       chartUpdate(data) {
         if (this.$refs[this.data.name] == undefined) {
-          console.log('Can not find ' + this.data.name + ' chart.')
           return
         }
         let usage = data.usage
@@ -169,7 +168,7 @@
       this.createChart()
       EventBus.$on('chart-setdate', (timestamp) => this.chartTimestamp(timestamp));
       EventBus.$on('chart-setrange', (range) => this.chartRange(range));
-      EventBus.$on('update', (data) => this.chartUpdate(data));
+      EventBus.$on('project-update', (data) => this.chartUpdate(data));
     }
   }
 </script>

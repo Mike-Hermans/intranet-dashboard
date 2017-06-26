@@ -89,7 +89,7 @@ import { EventBus } from '../EventBus'
           if (data == 200) {
             this.timedButtonShowLoading = false
             this.generalButtonShowLoading = false
-            EventBus.$emit('notify', 'Note has been saved')
+            EventBus.$emit('global-notify', 'Note has been saved')
           }
         })
       },

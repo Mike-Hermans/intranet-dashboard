@@ -14,7 +14,7 @@ export default {
     }
   },
   mounted() {
-    EventBus.$on('alert', message => {
+    EventBus.$on('global-alert', message => {
       this.message = message
       this.show = true
     })
