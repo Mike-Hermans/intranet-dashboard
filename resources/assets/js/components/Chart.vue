@@ -145,7 +145,9 @@
       chartUpdate(data) {
         let usage = data.usage
         let chart = this.$refs[this.data.name].chart
-        
+        if (chart == undefined) {
+          return
+        }
         if (this.data.name == 'tables') {
           if (data.tables == null) {
             return

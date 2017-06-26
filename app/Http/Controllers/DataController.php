@@ -238,6 +238,12 @@ class DataController extends Controller
         return json_encode($lastusage);
     }
 
+    /**
+     * 
+     *
+     * @param $slug
+     * @return string
+     */
     public function latest($slug)
     {
         $this->verifyProject($slug);
