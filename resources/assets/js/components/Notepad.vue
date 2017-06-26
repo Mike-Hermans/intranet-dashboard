@@ -5,11 +5,13 @@
         <v-tabs-slider></v-tabs-slider>
         <v-tabs-item href="#tabs-notes-1">
           General
-          <v-icon>description</v-icon>
+          <v-icon v-if="generalNote">description</v-icon>
+          <v-icon v-else>insert_drive_file</v-icon>
         </v-tabs-item>
         <v-tabs-item href="#tabs-notes-2">
           Timed
-          <v-icon>public</v-icon>
+          <v-icon v-if="timedNote">description</v-icon>
+          <v-icon v-else>insert_drive_file</v-icon>
         </v-tabs-item>
       </v-tabs-bar>
       <v-tabs-content :id="'tabs-notes-1'">
