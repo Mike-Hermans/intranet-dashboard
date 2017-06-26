@@ -133,7 +133,7 @@ class FetchDataController extends Controller
          * Update version only if it's different
          */
         if (isset($content['wp_version'])) {
-            $currentversion = $this->project->wp_version()
+            $currentversion = $this->project->WPVersion()
                 ->select('version')
                 ->where('project_id', $this->project->id)
                 ->orderBy('timestamp', 'desc')->first();
@@ -142,7 +142,7 @@ class FetchDataController extends Controller
                 $wp_version['version'] = $content['wp_version']['wp'];
                 $wp_version['timestamp'] = $this->timestamp;
                 $wp_version['project_id'] = $this->project->id;
-                $this->project->wp_version()->insert($wp_version);
+                $this->project->WPVersion()->insert($wp_version);
             }
         }
 

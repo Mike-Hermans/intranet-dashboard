@@ -17,6 +17,7 @@
     "laravel-mix": "0.*",
     "moment": "^2.18.1",
     "momentjs": "^2.0.0",
+    "node-schedule": "^1.2.3",
     "vue": "^2.2.6",
     "vue-highcharts": "0.0.10",
     "vue-moment": "^2.0.2",

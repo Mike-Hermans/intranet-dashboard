@@ -15,6 +15,7 @@ Vue.use(Vuetify)
 Vue.use(VueHighcharts, { Highcharts })
 Vue.use(require('vue-moment'), { moment })
 window.axios = axios
+window.schedule = require('node-schedule')
 
 window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.csrfToken
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'

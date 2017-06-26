@@ -161,10 +161,8 @@ class ForecastController extends Controller
      */
     private function canForecast()
     {
-        if (!$this->verifyProject($this->slug)) {
-            $this->message = 'project_not_found';
-            return false;
-        }
+        $this->verifyProject($this->slug);
+
         $this->csv_file = $this->slug . '_' . $this->type . '.csv';
         // If file exists, we're already forecasting the data.
         if (file_exists('r/' . $this->csv_file)) {

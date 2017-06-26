@@ -124,11 +124,12 @@
           //   }
           // })
         }
-      }
-    },
-    mounted() {
-      this.createChart()
-      EventBus.$on('chart-setdate', (timestamp) => {
+      },
+      chartRange(range) {
+        let chart = this.$refs[this.data.name].chart
+        chart.xAxis[0].setExtremes(range.min, range.max, true, false)
+      },
+      chartTimestamp(timestamp) {
         let chart = this.$refs[this.data.name].chart
         // For each series, highlight the correct point
         for (let serie of chart.series) {
@@ -140,11 +141,36 @@
             }
           }
         }
-      })
-      EventBus.$on('chart-setrange', (range) => {
+      },
+      chartUpdate(data) {
+        let usage = data.usage
+        if (this.data.name == 'tables') {
+          if (data.tables == null) {
+            return
+          }
+          usage = data.tables
+        }
         let chart = this.$refs[this.data.name].chart
-        chart.xAxis[0].setExtremes(range.min, range.max, true, false)
-      })
+        let lastTimestamp = chart.series[0].data[chart.series[0].data.length -1].x
+        let currentTimestamp = data.timestamp
+
+        // Only update when data is actually newer
+        if (currentTimestamp > lastTimestamp) {
+          for (let [i, serie] of Object.entries(chart.series)) {
+            if (usage[serie.name] !== undefined) {
+              chart.series[i].addPoint([currentTimestamp, usage[serie.name]], false, true)
+            }
+          }
+          // Redraw chart after all values have been updated
+          chart.redraw()
+        }
+      }
+    },
+    mounted() {
+      this.createChart()
+      EventBus.$on('chart-setdate', (timestamp) => this.chartTimestamp(timestamp));
+      EventBus.$on('chart-setrange', (range) => this.chartRange(range));
+      EventBus.$on('update', (data) => this.chartUpdate(data));
     }
   }
 </script>

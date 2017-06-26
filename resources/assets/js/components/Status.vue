@@ -88,6 +88,7 @@
 </template>
 
 <script>
+  import { EventBus } from '../EventBus'
   export default {
     name: 'status',
     data() {
@@ -106,10 +107,16 @@
           .then(({data}) => this[item] = data)
           .catch(error => console.log(error))
         }
+      },
+      updateData(data) {
+        if (data.update_status) {
+          this.getData()
+        }
       }
     },
     mounted() {
       this.getData()
+      EventBus.$on('update', (data) => this.updateData(data))
     },
     watch: {
       '$route' (to, from) {

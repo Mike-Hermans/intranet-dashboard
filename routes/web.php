@@ -25,6 +25,7 @@ Route::get('/api/project/{slug}/usage/{type?}', 'DataController@usage')
       ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
 Route::get('/api/project/{slug}/lastusage', 'DataController@lastUsage');
+Route::get('/api/project/{slug}/latest', 'DataController@latest');
 
 // Get all plugins
 Route::get('/api/project/{slug}/plugins', 'DataController@plugins');
@@ -55,10 +56,10 @@ Route::get('/cleanup', 'DataController@dataCleanup');
 Route::get('/forecast/{slug}/{type}', 'ForecastController@forecast')
       ->where(['type' => 'hdd|ram|(t|r)x|page|cpu']);
 
-Route::post('/api/project/{slug}/notes', 'FetchDataController@saveNotes');
-Route::post('/api/project/{slug}/update', 'ProjectController@updateProject');
 Route::post('/api/add', 'ProjectController@addProject');
 Route::post('/api/slug', 'ProjectController@createSlug');
+Route::post('/api/project/{slug}/notes', 'FetchDataController@saveNotes');
+Route::post('/api/project/{slug}/update', 'ProjectController@updateProject');
 Route::post('/api/project/remove', 'ProjectController@removeProject');
 
 // External connections

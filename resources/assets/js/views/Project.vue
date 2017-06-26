@@ -6,6 +6,7 @@
     <v-layout row wrap>
       <v-flex xs12 lg3 mb-4 order-lg2>
         <!-- <timecard mb-4 :time="time"></timecard> -->
+        <v-btn @click.native="update">Update</v-btn>
         <status></status>
       </v-flex>
       <v-flex xs12 lg9 order-lg1>
@@ -90,6 +91,7 @@ export default {
   mounted () {
     this.fetchProject()
     EventBus.$on('chart-setdate', (timestamp) => this.time = timestamp)
+    EventBus.$on('global-update', () => this.update())
   },
   watch: {
     '$route' (to, from) {
@@ -132,6 +134,10 @@ export default {
         .catch(error => console.log(error))
       })
       .catch((error) => this.error = error)
+    },
+    update() {
+      axios.get(this.apiurl + 'latest')
+      .then(({data}) => EventBus.$emit('update', data))
     }
   }
 }

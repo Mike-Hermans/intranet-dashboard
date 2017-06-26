@@ -1,6 +1,6 @@
 <template>
     <v-toolbar fixed light>
-      <v-toolbar-side-icon light @click.native.stop="$parent.nav = !$parent.nav" />
+      <v-toolbar-side-icon light @click.native.stop="$parent.nav = !$parent.nav"></v-toolbar-side-icon>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-toolbar-items>
         <v-toolbar-item ripple v-for="(icon, i) in icons" :key="i" :to="icon.url">

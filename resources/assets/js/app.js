@@ -5,6 +5,7 @@
  */
 import './bootstrap'
 import router from './routes'
+import { EventBus } from './EventBus'
 
 Vue.component('sidebar', require('./components/Sidebar'))
 Vue.component('toolbar', require('./components/Toolbar'))
@@ -13,6 +14,12 @@ new Vue({
     el: '#app',
     router,
     data: {
-        nav: true
+        nav: true,
+        schedule: null
+    },
+    created() {
+      this.schedule = schedule.scheduleJob('10 * * * * *', function(){
+        EventBus.$emit('global-update')
+      });
     }
 })

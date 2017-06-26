@@ -46,7 +46,7 @@ class DataController extends Controller
      * @param  string $table Table to select data from
      * @return string
      */
-    public function tables($slug, $table = '')
+    public function tables($slug, $table = '', $latest = false)
     {
         $this->verifyProject($slug);
         $this->table = $this->project->id . '_db';
@@ -236,5 +236,59 @@ class DataController extends Controller
                   ->orderBy('timestamp', 'latest')
                   ->first();
         return json_encode($lastusage);
+    }
+
+    public function latest($slug)
+    {
+        $this->verifyProject($slug);
+        $update_status = false;
+        $updatetime = $this->project->last_updated;
+
+        // Get last usage
+        $lastusage = \DB::table($this->project->id . '_usage')
+            ->select('hdd', 'ram', 'cpu', 'page')
+            ->orderBy('timestamp', 'latest')
+            ->first();
+
+        // Get other information (if updated in the last 60 seconds
+        $rows = \DB::table($this->project->id . '_db')
+            ->where('timestamp', '=', $updatetime)
+            ->orderBy('size', 'desc')->limit(4)
+            ->get();
+
+        if (empty($rows->toArray())) {
+            $tables = null;
+        } else {
+            $tables = array();
+            foreach ($rows as $row) {
+                $tables[$row->table] = $row->size;
+            }
+        }
+
+        $plugins = \DB::table($this->project->id . '_plugins')
+            ->where('timestamp', '=', $updatetime)
+            ->first();
+
+        $wp = \DB::table('wp_versions')
+            ->select('version')
+            ->where('project_id', $this->project->id)
+            ->where('timestamp', '=', $updatetime)
+            ->first();
+
+        $status = \DB::table('statuses')
+            ->where('project_id', $this->project->id)
+            ->where('timestamp', '=', $updatetime)
+            ->first();
+
+        if ($plugins || $wp || $status) {
+            $update_status = true;
+        }
+
+        return json_encode(array(
+            'timestamp' => $updatetime * 1000,
+            'usage' => $lastusage,
+            'tables' => $tables,
+            'update_status' => $update_status
+        ));
     }
 }
