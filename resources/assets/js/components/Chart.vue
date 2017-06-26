@@ -143,7 +143,7 @@
         }
       },
       chartUpdate(data) {
-        if ($refs[this.data.name] == undefined) {
+        if (this.$refs[this.data.name] == undefined) {
           console.log('Can not find ' + this.data.name + ' chart.')
           return
         }
