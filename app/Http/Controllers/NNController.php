@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Database\Schema\Blueprint;
 use App\Http\Controllers\CSVController;
+use App\Settings as Settings;
+use App\Project as Project;
 
 /**
  * Class NNController
@@ -17,6 +17,29 @@ use App\Http\Controllers\CSVController;
 class NNController extends Controller
 {
     private $network = 'cd $(pwd)/python; python nn.py';
+
+    public function NNStats()
+    {
+        return Settings::get('nn_stats', array());
+    }
+
+    public function projects()
+    {
+        $projects = Project::all();
+        $inactive_projects = Settings::get('nn_active_projects', array());
+
+        $data = array();
+        foreach ($projects as $project) {
+            $count = \DB::table($project->id . '_usage')
+                ->count();
+            $data[] = array(
+                'project' => $project->name,
+                'samples' => $count,
+                'active' => !in_array($project->id, $inactive_projects)
+            );
+        }
+        return $data;
+    }
 
     public function predict()
     {
@@ -40,6 +63,6 @@ class NNController extends Controller
 
     public function log()
     {
-        var_dump($this->command(''));
+
     }
 }

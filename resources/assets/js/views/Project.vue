@@ -30,8 +30,7 @@ export default {
   components: {
     'chart': require('../components/Chart'),
     'status': require('../components/Status'),
-    'notepad': require('../components/Notepad'),
-    'timecard': require('../components/TimeCard')
+    'notepad': require('../components/Notepad')
   },
   data () {
     return {

@@ -93,16 +93,16 @@
             <v-subheader>Types</v-subheader>
             <v-layout row wrap>
               <v-flex xs6>
-                <v-checkbox label="CPU" v-model="settings.forecast.types" value="cpu" dark></v-checkbox>
+                <v-checkbox label="CPU" v-model="settings.forecast" value="cpu" dark></v-checkbox>
               </v-flex>
               <v-flex xs6>
-                <v-checkbox label="RAM" v-model="settings.forecast.types" value="ram" dark></v-checkbox>
+                <v-checkbox label="RAM" v-model="settings.forecast" value="ram" dark></v-checkbox>
               </v-flex>
               <v-flex xs6>
-                <v-checkbox label="HDD" v-model="settings.forecast.types" value="hdd" dark></v-checkbox>
+                <v-checkbox label="HDD" v-model="settings.forecast" value="hdd" dark></v-checkbox>
               </v-flex>
               <v-flex xs6>
-                <v-checkbox label="Latency" v-model="settings.forecast.types" value="latency" dark></v-checkbox>
+                <v-checkbox label="Latency" v-model="settings.forecast" value="latency" dark></v-checkbox>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -168,14 +168,7 @@ export default {
         name: "",
         slug: "",
         url: "",
-        forecast: {
-          values: 5000,
-          method: 0,
-          points: 12,
-          sensitivity: 10,
-          refresh: 60,
-          types: ['cpu']
-        }
+        forecast: []
       },
       removeProjectDialog: false,
       removeProjectField: ''
@@ -193,6 +186,7 @@ export default {
         this.settings.name = data.name
         this.settings.slug = data.slug
         this.settings.url = data.url
+        this.settings.forecast = data.forecast
         this.saveButtonShowLoading = false;
         EventBus.$emit('toolbar-settings', {
           title: this.project.name + " - Settings" ,

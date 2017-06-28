@@ -54,6 +54,7 @@ export default {
       defaultItemGroup: [
         { header: 'General' },
         { title: 'Home', href: '/', icon: 'home' },
+        { title: 'Neural Network', href: '/network', icon: 'device_hub' },
         { title: 'Add Project', href:'/add-project', icon: 'library_add' },
         { divider: true },
         { header: 'Projects' }

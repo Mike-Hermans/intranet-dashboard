@@ -13,13 +13,18 @@ class Settings
      */
     public static function get($option, $default = false)
     {
-        $option = self::retrieveFromDatabase($option);
+        $value = self::retrieveFromDatabase($option);
 
-        if ($option == null) {
+        if (!$value) {
             return $default;
         }
 
-        return $option;
+        $decodedValue = json_decode($value);
+        if (json_last_error() == JSON_ERROR_NONE) {
+            return $decodedValue;
+        }
+
+        return $value;
     }
 
     /**
@@ -31,9 +36,13 @@ class Settings
      */
     public static function set($option, $value)
     {
-        $currentOption = self::retrieveFromDatabase($option);
+        $currentValue = self::retrieveFromDatabase($option);
 
-        if ($currentOption == null) {
+        if (is_array($value) || is_object($value)) {
+            $value = json_encode($value);
+        }
+
+        if ($currentValue == null) {
             \DB::table('settings')
                 ->insert(
                     ['option' => $option, 'value' => $value]
@@ -65,9 +74,13 @@ class Settings
      */
     public static function retrieveFromDatabase($option)
     {
-        return \DB::table('settings')
+        $option = \DB::table('settings')
             ->select('value')
             ->where('option', $option)
             ->first();
+        if ($option) {
+            return $option->value;
+        }
+        return false;
     }
 }

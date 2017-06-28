@@ -6,6 +6,10 @@ let routes = [
         component: require('./views/Home')
     },
     {
+        path: '/network',
+        component: require('./views/Network')
+    },
+    {
         path: '/project/:project',
         component: require('./views/Project')
     },

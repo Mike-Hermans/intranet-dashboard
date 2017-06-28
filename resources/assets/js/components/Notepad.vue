@@ -67,8 +67,7 @@ import { EventBus } from '../EventBus'
         generalNote: '',
         timedNote: '',
         generalButtonShowLoading: false,
-        timedButtonShowLoading: false,
-        apiurl: '/api/project/' + this.$route.params.project + '/notes'
+        timedButtonShowLoading: false
       }
     },
     methods: {
@@ -84,7 +83,7 @@ import { EventBus } from '../EventBus'
           this.generalButtonShowLoading = true
           note = { note: this.generalNote }
         }
-        axios.post(this.apiurl, note)
+        axios.post(this.$parent.apiurl + 'notes', note)
         .then(({data}) => {
           if (data == 200) {
             this.timedButtonShowLoading = false
@@ -94,14 +93,24 @@ import { EventBus } from '../EventBus'
         })
       },
       getNotes() {
-        axios.get(this.apiurl)
+        axios.get(this.$parent.apiurl + 'notes')
         .then(({data}) => {
           this.notes = data
+          let timedNotes = []
           for (let note of data) {
             if (note.timestamp === 0) {
               this.generalNote = note.note
+            } else {
+              timedNotes.push({
+                timestamp: note.timestamp,
+                event: note.note
+              })
             }
           }
+          EventBus.$emit('chart-set-flags', {
+            icon: 'N',
+            events: timedNotes
+          })
         })
       },
       findNote(timestamp) {

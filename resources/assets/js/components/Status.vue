@@ -94,7 +94,6 @@
     data() {
       return {
         status: null,
-        apiurl: '/api/project/' + this.$route.params.project + '/',
         plugins: null,
         events: null,
         statusitems: ['status', 'plugins', 'events']
@@ -103,8 +102,16 @@
     methods: {
       getData() {
         for (let item of this.statusitems) {
-          axios.get(this.apiurl + item)
-          .then(({data}) => this[item] = data)
+          axios.get(this.$parent.apiurl + item)
+          .then(({data}) => {
+            this[item] = data
+            if (item == 'events') {
+              EventBus.$emit('chart-set-flags', {
+                icon: 'E',
+                events: data
+              })
+            }
+          })
           .catch(error => console.log(error))
         }
       },
@@ -121,7 +128,6 @@
     watch: {
       '$route' (to, from) {
         if (to.params.project != from.params.project) {
-          this.apiurl = '/api/project/' + to.params.project + '/'
           this.getData()
         }
       }

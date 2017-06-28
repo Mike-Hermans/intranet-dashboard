@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 /*
- * Internal API
+ * Projects API
  */
 Route::get('/api/projects', 'ProjectController@getProjects');
 Route::get('/api/project/{slug}', 'ProjectController@getProject');
@@ -46,6 +46,11 @@ Route::get('/api/project/{slug}/notes', 'DataController@getNotes');
 Route::get('/api/project/{slug}/forecast/{type}', 'DataController@getForecast');
 Route::get('/api/project/{slug}/createforecasts', 'ForecastController@forecast');
 
+/*
+ * Neural Network API
+ */
+Route::get('/api/network/nnstats', 'NNController@NNStats');
+Route::get('/api/network/projects', 'NNController@projects');
 // Return CSV
 Route::get('/csv/{slug}', 'CSVController@usage');
 // Return a bigger set

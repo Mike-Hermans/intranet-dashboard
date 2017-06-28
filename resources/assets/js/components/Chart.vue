@@ -16,6 +16,7 @@
     props: ['data'],
     data () {
       return {
+        chart: false,
         options: {
           chart: {
             type: 'line',
@@ -80,8 +81,8 @@
     methods: {
       createChart() {
         for (let [key, value] of Object.entries(this.data.values)) {
-          axios.get('/api/project/' + this.$route.params.project + '/' + this.data.slug + '/' + value.value)
-          .then(({data}) => this.$refs[this.data.name].chart.addSeries({
+          axios.get(this.$parent.apiurl +  this.data.slug + '/' + value.value)
+          .then(({data}) => this.chart.addSeries({
             id: value.value,
             name: value.value,
             color: value.color,
@@ -90,7 +91,7 @@
           .catch(error => console.log(error))
 
           // Check for forecast values
-          axios.get('/api/project/' + this.$route.params.project + '/forecast/' + value.value)
+          axios.get(this.$parent.apiurl + 'forecast/' + value.value)
           .then(({data}) => {
             if (data.length > 0) {
               let serie = []
@@ -99,7 +100,7 @@
                 serie.push([fpoint.point * 1000, fpoint.forecast])
                 eighty.push([fpoint.point * 1000, fpoint.lo95, fpoint.hi95])
               }
-              this.$refs[this.data.name].chart.addSeries({
+              this.chart.addSeries({
                 id: value.value + '_forecast',
                 name: value.value + '_forecast',
                 color: '000000',
@@ -111,7 +112,7 @@
                     lineWidth: 2
                 }
               })
-              this.$refs[this.data.name].chart.addSeries({
+              this.chart.addSeries({
                 name: '95% Range',
                 data: eighty,
                 type: 'arearange',
@@ -129,13 +130,11 @@
 
       },
       chartRange(range) {
-        let chart = this.$refs[this.data.name].chart
-        chart.xAxis[0].setExtremes(range.min, range.max, true, false)
+        this.chart.xAxis[0].setExtremes(range.min, range.max, true, false)
       },
       chartTimestamp(timestamp) {
-        let chart = this.$refs[this.data.name].chart
         // For each series, highlight the correct point
-        for (let serie of chart.series) {
+        for (let serie of this.chart.series) {
           for (let chartpoint of serie.data) {
             if (chartpoint && chartpoint.x == timestamp) {
               chartpoint.select()
@@ -146,11 +145,8 @@
         }
       },
       chartUpdate(data) {
-        if (this.$refs[this.data.name] == undefined) {
-          return
-        }
         let usage = data.usage
-        let chart = this.$refs[this.data.name].chart
+
         if (this.data.name == 'tables') {
           if (data.tables == null) {
             return
@@ -158,20 +154,46 @@
           usage = data.tables
         }
 
-        for (let [i, serie] of Object.entries(chart.series)) {
+        for (let [i, serie] of Object.entries(this.chart.series)) {
           if (usage[serie.name] !== undefined) {
-            chart.series[i].addPoint([data.timestamp, usage[serie.name]], false, true)
+            this.chart.series[i].addPoint([data.timestamp, usage[serie.name]], false, true)
           }
         }
         // Redraw chart after all values have been updated
-        chart.redraw()
+        this.chart.redraw()
+      },
+      setFlags(flags) {
+        let data = []
+        let used_timestamps = []
+        for (let flag of flags.events) {
+          // Only allow unique timestamps
+          if (!used_timestamps.includes(flag.timestamp) && ((new Date) - flag.timestamp * 1000) < 604800000) {
+            data.push({
+              x: flag.timestamp * 1000,
+              //text: flag.event,
+              title: flags.icon
+            })
+          }
+        }
+        // Sort based on timestamp
+        data.sort((a, b) => b.timestamp - a.timestamp)
+
+        // Add to chart
+        this.chart.addSeries({
+          type: 'flags',
+          shape: 'circlepin',
+          width: 16,
+          data
+        })
       }
     },
     mounted() {
+      this.chart = this.$refs[this.data.name].chart
       this.createChart()
-      EventBus.$on('chart-setdate', (timestamp) => this.chartTimestamp(timestamp));
-      EventBus.$on('chart-setrange', (range) => this.chartRange(range));
-      EventBus.$on('project-update', (data) => this.chartUpdate(data));
+      EventBus.$on('chart-setdate', (timestamp) => this.chartTimestamp(timestamp))
+      EventBus.$on('chart-setrange', (range) => this.chartRange(range))
+      EventBus.$on('chart-set-flags', (flags) => this.setFlags(flags))
+      EventBus.$on('project-update', (data) => this.chartUpdate(data))
     }
   }
 </script>

@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Database\Schema\Blueprint;
-
 /**
  * Class ForecastController
  *
@@ -37,6 +34,7 @@ class ForecastController extends Controller
         ->where('project_id', '=', $this->project['id'])
         ->where('type', '=', $type)
         ->first();
+
         if (!empty($forecast)) {
             echo $forecast['forecast'];
         } else {
@@ -56,7 +54,7 @@ class ForecastController extends Controller
         $this->type = $type;
 
         if (! $this->canForecast()) {
-            die($this->message);
+            return;
         }
 
         // At this moment we know the project exists, have it's ID and can forecast.

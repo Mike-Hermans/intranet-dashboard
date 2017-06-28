@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Schema\Blueprint;
+use App\Settings as Settings;
+use App\Project as Project;
 
 /**
  * Class ProjectController
@@ -28,7 +30,7 @@ class ProjectController extends Controller
      */
     public function getProjects()
     {
-        return \App\Project::select()->orderBy('name')->get();
+        return Project::select()->orderBy('name')->get();
     }
 
     /**
@@ -40,12 +42,10 @@ class ProjectController extends Controller
     public function getProject($slug)
     {
         $this->verifyProject($slug);
-        if ($this->project) {
-            // Format the project key so it's not completely visible
-            $this->project['projectkey'] = $this->project->getKey();
-            return $this->project->toArray();
-        }
-        return 'not_found';
+
+        $this->project['projectkey'] = $this->project->getKey();
+        $this->project['forecast'] = Settings::get($this->project->id . '_forecast_values');
+        return $this->project->toArray();
     }
 
     /**
@@ -71,6 +71,11 @@ class ProjectController extends Controller
         $this->project->url = $this->settings->url;
         $this->project->name = $this->settings->name;
         $this->project->save();
+
+        if ($this->settings->forecast) {
+            Settings::set($this->project->id . '_forecast_values', $this->settings->forecast);
+        }
+
         return 200;
     }
 
@@ -99,7 +104,7 @@ class ProjectController extends Controller
      */
     private function createNewProject($newproject)
     {
-        $project = new \App\Project;
+        $project = new Project;
         $project->name = $newproject->name;
         $project->slug = str_slug($newproject->name, '-');
         $project->key = $newproject->key;

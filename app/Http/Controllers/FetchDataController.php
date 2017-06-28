@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Settings;
 use Illuminate\Http\Request;
-use Illuminate\Database\Schema\Blueprint;
 
 /**
  * Class FetchDataController
@@ -36,6 +36,9 @@ class FetchDataController extends Controller
         $this->project->save();
 
         $this->saveData(json_decode($request->getContent(), true));
+
+        $this->callForecasts();
+
         return 'success';
     }
 
@@ -50,12 +53,21 @@ class FetchDataController extends Controller
     public function saveNotes(Request $request, $slug)
     {
         $this->verifyProject($slug);
-        $note = new \App\Note;
 
         $content = json_decode($request->getContent(), true);
+        $timestamp = isset($content['timestamp']) ? $content['timestamp'] / 1000 : 0;
 
+        $note = \App\Note::where('project_id', $this->project->id)->where('timestamp', $timestamp)->first();
+        if (is_null($note)) {
+            $note = new \App\Note;
+            $note->timestamp = $timestamp;
+        } else {
+            if (empty($content['note'])) {
+                $note->delete();
+            }
+        }
         $note->note = $content['note'];
-        $note->timestamp = isset($content['timestamp']) ? $content['timestamp'] / 1000 : 0;
+
         $this->project->notes()->save($note);
         return 200;
     }
@@ -171,6 +183,22 @@ class FetchDataController extends Controller
 
         if (isset($content['plugins'])) {
             $this->savePluginData($content['plugins']);
+        }
+    }
+
+    /**
+     * Calls the forecast function for each value
+     */
+    private function callForecasts()
+    {
+        $fc = new ForecastController();
+
+        $forecast_values = Settings::get($this->project->id . '_forecast_values');
+
+        if ($forecast_values) {
+            foreach ($forecast_values as $forecast_value) {
+                $fc->forecast($this->project->slug, $forecast_value);
+            }
         }
     }
 

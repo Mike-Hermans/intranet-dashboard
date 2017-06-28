@@ -195,18 +195,13 @@ class DataController extends Controller
      */
     public function dataCleanup()
     {
-        //$projects = \App\Project::all();
         $projects = [1,3,4,5,6,7,8,9,11,12,13];
         $tables = ['usage', 'db'];
         foreach ($projects as $project) {
             foreach ($tables as $table) {
                 echo "DELETE FROM " . $project . "_" . $table . " WHERE timestamp < " . strtotime('4 days ago') . "; <br/>";
-//                \DB::table($project->id . '_' . $table)
-//                ->where('timestamp', '<', strtotime('4 days ago'))
-//                ->delete();
             }
         }
-        echo "All data older than 4 days ago has been removed.";
     }
 
     /**
