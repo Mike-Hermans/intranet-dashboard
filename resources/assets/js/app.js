@@ -7,10 +7,10 @@ import './bootstrap'
 import router from './routes'
 import { EventBus } from './EventBus'
 
+Vue.component('alert', require('./components/Alert'))
 Vue.component('sidebar', require('./components/Sidebar'))
 Vue.component('toolbar', require('./components/Toolbar'))
 Vue.component('notification', require('./components/Notification'))
-Vue.component('alert', require('./components/Alert'))
 
 new Vue({
     el: '#app',

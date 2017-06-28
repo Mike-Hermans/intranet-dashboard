@@ -239,7 +239,7 @@ class DataController extends Controller
     }
 
     /**
-     * 
+     *
      *
      * @param $slug
      * @return string

@@ -121,7 +121,7 @@ class ForecastController extends Controller
 
     /**
      * Generates a CSV file containing every tenth value
-     * for the past 5000 values.
+     * for the past 2000 values.
      */
     private function generateCSV()
     {

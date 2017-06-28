@@ -64,3 +64,5 @@ Route::post('/api/project/remove', 'ProjectController@removeProject');
 
 // External connections
 Route::post('/api/collect', 'FetchDataController@collect');
+
+Route::get('/nn', 'NNController@log');
