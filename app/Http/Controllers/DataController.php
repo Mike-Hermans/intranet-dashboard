@@ -195,17 +195,18 @@ class DataController extends Controller
      */
     public function dataCleanup()
     {
-        $projects = \App\Project::all();
-
+        //$projects = \App\Project::all();
+        $projects = [1,3,4,5,6,7,8,9,11,12,13];
         $tables = ['usage', 'db'];
         foreach ($projects as $project) {
             foreach ($tables as $table) {
-                \DB::table($project->id . '_' . $table)
-                ->where('timestamp', '<', strtotime('7 days ago'))
-                ->delete();
+                echo "DELETE FROM " . $project . "_" . $table . " WHERE timestamp < " . strtotime('4 days ago') . "; <br/>";
+//                \DB::table($project->id . '_' . $table)
+//                ->where('timestamp', '<', strtotime('4 days ago'))
+//                ->delete();
             }
         }
-        echo "All data older than a week ago has been removed.";
+        echo "All data older than 4 days ago has been removed.";
     }
 
     /**
@@ -236,6 +237,29 @@ class DataController extends Controller
                   ->orderBy('timestamp', 'latest')
                   ->first();
         return json_encode($lastusage);
+    }
+
+    /**
+     * Get all forecasts for a project
+     *
+     * @param  string $slug Project slug
+     * @param  string $type Type to get forecast for
+     * @return array
+     */
+    public function getForecast($slug, $type)
+    {
+        $this->verifyProject($slug);
+
+        $forecast = \App\Forecast::select('forecast')
+            ->where('project_id', '=', $this->project['id'])
+            ->where('type', '=', $type)
+            ->where('last_point', '>=', strtotime('7 days ago'))
+            ->first();
+
+        if (!empty($forecast)) {
+            return $forecast['forecast'];
+        }
+        return array();
     }
 
     /**

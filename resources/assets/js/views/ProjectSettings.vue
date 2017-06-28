@@ -92,22 +92,16 @@
           <v-flex xs12>
             <v-subheader>Types</v-subheader>
             <v-layout row wrap>
-              <v-flex xs6 sm4>
-                <v-checkbox label="Usage: CPU" v-model="settings.forecast.types" value="cpu" dark></v-checkbox>
+              <v-flex xs6>
+                <v-checkbox label="CPU" v-model="settings.forecast.types" value="cpu" dark></v-checkbox>
               </v-flex>
-              <v-flex xs6 sm4>
-                <v-checkbox label="Usage: RAM" v-model="settings.forecast.types" value="ram" dark></v-checkbox>
+              <v-flex xs6>
+                <v-checkbox label="RAM" v-model="settings.forecast.types" value="ram" dark></v-checkbox>
               </v-flex>
-              <v-flex xs6 sm4>
-                <v-checkbox label="Usage: HDD" v-model="settings.forecast.types" value="hdd" dark></v-checkbox>
+              <v-flex xs6>
+                <v-checkbox label="HDD" v-model="settings.forecast.types" value="hdd" dark></v-checkbox>
               </v-flex>
-              <v-flex xs6 sm4>
-                <v-checkbox label="Network: RX" v-model="settings.forecast.types" value="rx" dark></v-checkbox>
-              </v-flex>
-              <v-flex xs6 sm4>
-                <v-checkbox label="Network: TX" v-model="settings.forecast.types" value="tx" dark></v-checkbox>
-              </v-flex>
-              <v-flex xs6 sm4>
+              <v-flex xs6>
                 <v-checkbox label="Latency" v-model="settings.forecast.types" value="latency" dark></v-checkbox>
               </v-flex>
             </v-layout>

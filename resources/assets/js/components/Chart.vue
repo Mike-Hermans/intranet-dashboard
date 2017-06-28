@@ -92,7 +92,7 @@
           // Check for forecast values
           axios.get('/api/project/' + this.$route.params.project + '/forecast/' + value.value)
           .then(({data}) => {
-            if (data !== 'no_forecast') {
+            if (data.length > 0) {
               let serie = []
               let eighty = []
               for (let [key, fpoint] of Object.entries(data)) {
@@ -124,6 +124,9 @@
             }
           })
         }
+      },
+      chartForecasts() {
+
       },
       chartRange(range) {
         let chart = this.$refs[this.data.name].chart
