@@ -42,6 +42,8 @@ Route::get('/api/project/{slug}/events', 'DataController@events');
 // Get Notes
 Route::get('/api/project/{slug}/notes', 'DataController@getNotes');
 
+Route::get('/api/project/{slug}/isworking', 'DataController@isWorking');
+
 // Get the forecast for a type
 Route::get('/api/project/{slug}/forecast/{type}', 'DataController@getForecast');
 Route::get('/api/project/{slug}/createforecasts', 'ForecastController@forecast');

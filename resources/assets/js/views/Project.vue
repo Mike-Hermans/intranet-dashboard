@@ -3,6 +3,13 @@
     <v-layout row wrap>
       <v-flex xs12 lg3 mb-4 order-lg2>
         <status></status>
+        <v-btn
+          v-if="time != 'now'"
+          @click.native="time = 'now'"
+          class="blue darken-2 white--text"
+        >
+          Cancel relative time
+        </v-btn>
       </v-flex>
       <v-flex xs12 lg9 order-lg1>
         <v-layout row wrap v-if="renderCharts">
@@ -84,7 +91,9 @@ export default {
   },
   mounted () {
     this.fetchProject()
-    EventBus.$on('chart-setdate', (timestamp) => this.time = timestamp)
+    EventBus.$on('chart-setdate', (timestamp) => {
+      this.time = timestamp
+    })
     EventBus.$on('global-update', () => this.update())
   },
   watch: {
@@ -99,13 +108,19 @@ export default {
   methods: {
     fetchProject() {
       this.renderCharts = false
+      var pre = this.$route.params.project
       axios.get('/api/project/' + this.$route.params.project)
       .then(({data}) => {
+        if (pre !== this.$route.params.project) {
+          return
+        }
         this.project = data
         if (!this.project.projectkey) {
           EventBus.$emit('global-alert', 'Key not set for this project, no data will be collected.')
         }
-        this.time = data.last_updated * 1000
+        if (!this.project.isworking) {
+          EventBus.$emit('global-alert', 'Problems detected!')
+        }
         // Change the toolbar title
         EventBus.$emit('toolbar-settings', {
           title: this.project.name,
@@ -135,6 +150,14 @@ export default {
     update() {
       axios.get(this.apiurl + 'latest')
       .then(({data}) => {
+        axios.get(this.apiurl + 'isworking')
+        .then(({data}) => {
+          if (data == 0) {
+            EventBus.$emit('global-alert', 'Problems detected!')
+          } else {
+            EventBus.$emit('global-alert-none')
+          }
+        })
         if (data.timestamp > this.project.last_updated * 1000) {
           this.project.last_updated = data.timestamp / 1000
           EventBus.$emit('project-update', data)

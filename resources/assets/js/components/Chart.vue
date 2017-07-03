@@ -126,41 +126,46 @@
           })
         }
       },
-      chartForecasts() {
-
-      },
       chartRange(range) {
-        this.chart.xAxis[0].setExtremes(range.min, range.max, true, false)
+        if (this.chart !== undefined && this.chart.xAxis !== undefined) {
+          if (this.chart.xAxis.length > 0) {
+            this.chart.xAxis[0].setExtremes(range.min, range.max, true, false)
+          }
+        }
       },
       chartTimestamp(timestamp) {
         // For each series, highlight the correct point
-        for (let serie of this.chart.series) {
-          for (let chartpoint of serie.data) {
-            if (chartpoint && chartpoint.x == timestamp) {
-              chartpoint.select()
-              chartpoint.onMouseOver()
-              break;
+        if (this.chart !== undefined) {
+          for (let serie of this.chart.series) {
+            for (let chartpoint of serie.data) {
+              if (chartpoint && chartpoint.x == timestamp) {
+                chartpoint.select()
+                chartpoint.onMouseOver()
+                break;
+              }
             }
           }
         }
       },
       chartUpdate(data) {
-        let usage = data.usage
+        if (this.chart !== undefined) {
+          let usage = data.usage
 
-        if (this.data.name == 'tables') {
-          if (data.tables == null) {
-            return
+          if (this.data.name == 'tables') {
+            if (data.tables == null) {
+              return
+            }
+            usage = data.tables
           }
-          usage = data.tables
-        }
 
-        for (let [i, serie] of Object.entries(this.chart.series)) {
-          if (usage[serie.name] !== undefined) {
-            this.chart.series[i].addPoint([data.timestamp, usage[serie.name]], false, true)
+          for (let [i, serie] of Object.entries(this.chart.series)) {
+            if (usage[serie.name] !== undefined) {
+              this.chart.series[i].addPoint([data.timestamp, usage[serie.name]], false, true)
+            }
           }
+          // Redraw chart after all values have been updated
+          this.chart.redraw()
         }
-        // Redraw chart after all values have been updated
-        this.chart.redraw()
       },
       setFlags(flags) {
         let data = []
@@ -188,12 +193,14 @@
       }
     },
     mounted() {
-      this.chart = this.$refs[this.data.name].chart
-      this.createChart()
-      EventBus.$on('chart-setdate', (timestamp) => this.chartTimestamp(timestamp))
-      EventBus.$on('chart-setrange', (range) => this.chartRange(range))
-      EventBus.$on('chart-set-flags', (flags) => this.setFlags(flags))
-      EventBus.$on('project-update', (data) => this.chartUpdate(data))
+      if (this.$refs[this.data.name] !== undefined) {
+        this.chart = this.$refs[this.data.name].chart
+        this.createChart()
+        EventBus.$on('chart-setdate', (timestamp) => this.chartTimestamp(timestamp))
+        EventBus.$on('chart-setrange', (range) => this.chartRange(range))
+        EventBus.$on('chart-set-flags', (flags) => this.setFlags(flags))
+        EventBus.$on('project-update', (data) => this.chartUpdate(data))
+      }
     }
   }
 </script>

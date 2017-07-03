@@ -80,12 +80,13 @@
             .then(({data}) => {
               project.data = data
               if (data) {
-                if (data.page == -1) {
+                if (data.page == -1 || project.isworking == 0) {
                   project.status = {
                     code: 0,
                     message: 'Not reachable'
                   }
-                } else if (data.hdd > 80 || data.ram > 80 || data.cpu > 80) {
+                  EventBus.$emit('global-alert', project.name + ' is experiencing problems.')
+                } else if (data.hdd > 95 || data.ram > 90 || data.cpu > 90) {
                   project.status = {
                     code: 1,
                     message: 'Unexpected measurements'

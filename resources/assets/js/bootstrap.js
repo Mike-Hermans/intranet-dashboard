@@ -12,6 +12,11 @@ highchartsMore(Highcharts)
 window.Vue = Vue
 Vue.use(VueRouter)
 Vue.use(Vuetify)
+Highcharts.setOptions({
+  global: {
+    useUTC: false
+  }
+})
 Vue.use(VueHighcharts, { Highcharts })
 Vue.use(require('vue-moment'), { moment })
 window.axios = axios

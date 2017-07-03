@@ -231,6 +231,33 @@ class FetchDataController extends Controller
         $usage['timestamp'] = $this->timestamp;
         $usage['page'] = $this->ping();
         \DB::table($table)->insert($usage);
+
+        // Test options
+        $currentStatus = $this->project->isworking;
+        if ($usage['ram'] >= 99) {
+            if ($currentStatus == 1) {
+                $this->project->events()->insert(
+                    array(
+                        'project_id' => $this->project->id,
+                        'timestamp' => $this->timestamp,
+                        'event' => "Problems detected!"
+                    )
+                );
+                $this->project->isworking = 0;
+            }
+        } else {
+            if ($currentStatus == 0) {
+                $this->project->events()->insert(
+                    array(
+                        'project_id' => $this->project->id,
+                        'timestamp' => $this->timestamp,
+                        'event' => "Problems have been solved"
+                    )
+                );
+                $this->project->isworking = 1;
+            }
+        }
+        $this->project->save();
     }
 
     /**

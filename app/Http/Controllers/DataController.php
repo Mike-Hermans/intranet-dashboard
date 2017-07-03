@@ -258,7 +258,19 @@ class DataController extends Controller
     }
 
     /**
+     * Returns whether the project is in working condition.
      *
+     * @param  string $slug
+     * @return bool
+     */
+    public function isWorking($slug)
+    {
+        $this->verifyProject($slug);
+        return $this->project->isworking;
+    }
+
+    /**
+     * Returns the latest data for the project
      *
      * @param $slug
      * @return string
@@ -305,7 +317,12 @@ class DataController extends Controller
             ->where('timestamp', '=', $updatetime)
             ->first();
 
-        if ($plugins || $wp || $status) {
+        $events = \DB::table('events')
+            ->where('project_id', $this->project->id)
+            ->where('timestamp', '=', $updatetime)
+            ->first();
+
+        if ($plugins || $wp || $status || $events) {
             $update_status = true;
         }
 

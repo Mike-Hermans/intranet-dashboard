@@ -26,10 +26,11 @@
           </v-card-row>
         </v-card-text>
         <v-divider v-if="events"></v-divider>
+        <v-subheader v-if="$parent.time != 'now'">Time relative to: {{ $parent.time | moment("dddd, MMMM Do YYYY, HH:mm:ss") }}</v-subheader>
         <v-card-text v-for="(event, i) in events" :key="i" height="60px">
-          <div>
+          <div @click.native='setTime(event.timestamp * 1000)'>
             <div>{{ event.event }}</div>
-            <strong>{{ event.timestamp * 1000 | moment("from", $parent.time)}}</strong>
+            <strong>{{ event.timestamp * 1000 | moment("from", $parent.time) }}</strong>
           </div>
         </v-card-text>
       </v-tabs-content>
@@ -118,7 +119,15 @@
       updateData(data) {
         if (data.update_status) {
           this.getData()
+        } else {
+          for (let [i, event] of Object.entries(this.events)) {
+            event.timestamp++
+            event.timestamp--
+          }
         }
+      },
+      setTime(timestamp) {
+        EventBus.$emit('chart-setdate', timestamp)
       }
     },
     mounted() {

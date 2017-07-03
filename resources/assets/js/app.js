@@ -16,8 +16,7 @@ new Vue({
     el: '#app',
     router,
     data: {
-        nav: true,
-        schedule: null
+        nav: true
     },
     created() {
       this.schedule = schedule.scheduleJob('10 * * * * *', function(){

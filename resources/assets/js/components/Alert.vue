@@ -18,12 +18,11 @@ export default {
       this.message = message
       this.show = true
     })
+    EventBus.$on('global-alert-none', () => this.show = false)
   },
   watch: {
     '$route' (to, from) {
-      if (to.params.project != from.params.project) {
-        this.show = false
-      }
+      this.show = false
     }
   },
 }

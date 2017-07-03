@@ -47,9 +47,12 @@
         <li>Install the WP Data Push plugin on the remote server</li>
         <li>Log in via SSH and go to your webroot</li>
         <li>Activate the plugin: <kbd>wp plugin activate wp-data-push</kbd></li>
-        <li>Set the remote host: <kbd>wp ai-client set-remote {{ webUrl() }}/</kbd></li>
-        <li>Set the name for the project (<code>{{project.slug}}</code>): <kbd>wp ai-client set-name {{ project.slug }}</kbd></li>
+        <li>Set the remote host: <kbd>wp data-push set-remote {{ webUrl() }}/</kbd></li>
+        <li>Set the name for the project (<code>{{project.slug}}</code>): <kbd>wp data-push set-name {{ project.slug }}</kbd></li>
       </ol>
+      <p>
+        Or do it all at once: <kbd>wp plugin activate wp-data-push &amp;&amp; wp data-push set-remote {{ webUrl() }}/ &amp;&amp; wp data-push set-name {{ project.slug }}</kbd>
+      </p>
       <v-btn primary @click.native="stepper = 3" light>Continue</v-btn>
       <v-btn flat dark @click.native="stepper = 1">Back</v-btn>
     </v-stepper-content>
@@ -59,11 +62,11 @@
         Create a new key, either by generating one or creating one yourself.</p>
       <p>
         <b>Generate key:</b> <br/>
-        <kbd>wp ai-client generate-key</kbd>
+        <kbd>wp data-push generate-key</kbd>
       </p>
       <p>
         <b>Create your own key:</b><br/>
-        <kbd>wp ai-client set-key "[keyphrase]"</kbd>
+        <kbd>wp data-push set-key "[keyphrase]"</kbd>
       </p>
       <p>
         Enter the key in the field below
@@ -94,7 +97,7 @@
         After adding the project, set up a cronjob using the following commands:
       </p>
       <ol>
-        <li>Generate the command: <kbd>echo "* * * * * cd $(pwd); $(which wp) ai-client send > /dev/null 2>&1"</kbd></li>
+        <li>Generate the command: <kbd>echo "* * * * * cd $(pwd); $(which wp) data-push send > /dev/null 2>&1"</kbd></li>
         <li>Copy the result</li>
         <li>Edit your cron jobs: <kbd>crontab -e</kbd> and past the previous result</li>
         <li>Save the crontab</li>

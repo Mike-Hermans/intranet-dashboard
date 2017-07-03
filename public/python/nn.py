@@ -122,9 +122,8 @@ class NeuralNet:
                     fn += 1
             it.iternext()
 
-        print "TP: " + str(tp) + " | TN: " + str(tn) + "\nFP: " + str(fp) + " | FN: " + str(fn)
         acc = float(tp+tn) / float(tp+tn+fp+fn) * 100
-        print "Accuracy: " + str(acc) + "%"
+        print "[" + str(tp) + "," + str(tn) + "," + str(fp) + "," + str(fn) + "," + acc + "]"
 
     '''
     --- HELPER FUNCTIONS ---

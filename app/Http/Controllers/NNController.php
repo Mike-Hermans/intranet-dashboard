@@ -20,7 +20,15 @@ class NNController extends Controller
 
     public function NNStats()
     {
-        return Settings::get('nn_stats', array());
+        //return Settings::get('nn_stats', array());
+        return array(
+            'Samples' => 200,
+            'TP' => 80,
+            'TN' => 79,
+            'FP' => 6,
+            'FN' => 35,
+            'Accuracy' => '79.5%'
+        );
     }
 
     public function projects()
@@ -58,11 +66,12 @@ class NNController extends Controller
 
     private function trainNetwork()
     {
-        shell_exec('');
+        shell_exec($this->command('verify'));
     }
 
     public function log()
     {
-
+        var_dump($this->network . ' verify');
+        var_dump($this->command('verify'));
     }
 }

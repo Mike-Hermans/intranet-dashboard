@@ -35,11 +35,11 @@
               </v-list-tile-content>
             </v-list-item>
             <v-divider></v-divider>
-            <v-subheader>Neural Network</v-subheader>
+            <v-subheader>Neural Network Verification</v-subheader>
             <v-list-item v-for="(stat, i) in nnstats" :key="i">
               <v-list-tile-content>
                 <v-list-tile-title>
-                  <b>{{ stat.prop }}:</b> {{ stat.value }}
+                  <b>{{ i }}:</b> {{ stat }}
                 </v-list-tile-title>
               </v-list-tile-content>
             </v-list-item>
@@ -63,7 +63,6 @@ export default {
     activeProjects() {
       let count = 0
       if (this.projects) {
-        console.log(this.projects);
         for (let project of this.projects) {
           if (project.active) {
             count++
