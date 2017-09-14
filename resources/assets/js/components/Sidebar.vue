@@ -9,7 +9,7 @@
             <v-list-item slot="item">
               <v-list-tile ripple>
                 <v-list-tile-action>
-                  <v-icon light>{{item.icon}}</v-icon>
+                  <v-icon light v-if="item.icon">{{ item.icon }}</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-title v-text="item.title" />
                 <v-list-tile-action>
@@ -35,9 +35,11 @@
           <v-list-item>
             <v-list-tile :href="item.href" router ripple>
               <v-list-tile-action>
-                <v-icon light v-if="item.icon">{{ item.icon }}</v-icon>
+                <v-icon v-if="item.isworking === 0" class="red--text">{{item.icon}}</v-icon>
+                <v-icon v-else light>{{item.icon}}</v-icon>
               </v-list-tile-action>
-              <v-list-tile-title v-text="item.title" />
+              <v-list-tile-title v-if="item.isworking === 0" class="red--text" v-text="item.title"></v-list-tile-title>
+              <v-list-tile-title v-else v-text="item.title" />
             </v-list-tile>
           </v-list-item>
         </template>
@@ -78,7 +80,8 @@ export default {
           group.push({
             title: item.name,
             href: '/project/' + item.slug,
-            icon: 'timeline'
+            icon: 'timeline',
+            isworking: item.isworking
           })
         }
         this.itemGroup = group

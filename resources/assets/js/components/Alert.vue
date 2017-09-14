@@ -17,8 +17,12 @@ export default {
     EventBus.$on('global-alert', message => {
       this.message = message
       this.show = true
+      EventBus.$emit('refresh-sidebar')
     })
-    EventBus.$on('global-alert-none', () => this.show = false)
+    EventBus.$on('global-alert-none', () => {
+      this.show = false
+      EventBus.$emit('refresh-sidebar')
+    })
   },
   watch: {
     '$route' (to, from) {
